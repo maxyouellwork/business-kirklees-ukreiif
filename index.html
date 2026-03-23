@@ -43,13 +43,11 @@
     #btt:hover{border-color:var(--orange)}
 
     /* LOADER */
-    .loader{position:fixed;inset:0;z-index:100;background:var(--navy-deep);display:flex;align-items:center;justify-content:center}
-    .loader-logo{height:36px;opacity:0;transform:scale(.9);transition:opacity .3s,transform .3s}
+    .loader{position:fixed;inset:0;z-index:100;background:var(--navy-deep);display:flex;align-items:center;justify-content:center;transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}
+    .loader-logo{height:36px;opacity:0;transform:scale(.92);transition:opacity .35s ease,transform .35s ease}
     .loader-logo.in{opacity:.7;transform:scale(1)}
-    .loader-top,.loader-bot{position:fixed;left:0;right:0;height:50%;background:var(--navy-deep);z-index:100;transition:transform .5s cubic-bezier(.7,0,.3,1)}
-    .loader-top{top:0}.loader-bot{bottom:0}
-    .loader-top.open{transform:translateY(-100%)}.loader-bot.open{transform:translateY(100%)}
-    .loader.hide{pointer-events:none}
+    .loader.out{opacity:0;transform:scale(1.05)}
+    .loader.hide{display:none}
 
     /* ===== HERO (dark, left-aligned) ===== */
     .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--navy-deep)}
@@ -220,8 +218,6 @@
 
   <!-- LOADER -->
   <div class="loader" id="loader"><img class="loader-logo" id="loaderLogo" src="https://businesskirklees.com/wp-content/uploads/2022/07/Business-Kirklees-icon-white.png" alt=""></div>
-  <div class="loader-top" id="loaderTop"></div>
-  <div class="loader-bot" id="loaderBot"></div>
 
   <!-- HERO -->
   <header class="hero">
@@ -372,24 +368,15 @@
 
     // LOADER + HERO
     const heroVideo=document.getElementById("heroVideo");
-    const loaderLogo=document.getElementById("loaderLogo");
     const loaderEl=document.getElementById("loader");
-    // Fade logo in
-    setTimeout(()=>loaderLogo.classList.add("in"),50);
-    // After 500ms, split open and reveal
+    // Logo fades in
+    setTimeout(()=>document.getElementById("loaderLogo").classList.add("in"),50);
+    // After 800ms, loader fades out with scale
     setTimeout(()=>{
-      loaderLogo.style.opacity="0";
-      document.getElementById("loaderTop").classList.add("open");
-      document.getElementById("loaderBot").classList.add("open");
+      loaderEl.classList.add("out");
       heroVideo.play().catch(()=>{});
-      setTimeout(()=>{
-        loaderEl.classList.add("hide");
-        loaderEl.style.display="none";
-        document.getElementById("loaderTop").style.display="none";
-        document.getElementById("loaderBot").style.display="none";
-        runHero();
-      },500);
-    },600);
+      setTimeout(()=>{loaderEl.classList.add("hide");runHero()},600);
+    },800);
 
     // HERO
     function runHero(){
