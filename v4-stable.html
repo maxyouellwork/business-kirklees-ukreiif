@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#060d1a">
+  <title>Invest in Kirklees | Business &amp; Regeneration</title>
+  <link rel="icon" href="https://businesskirklees.com/wp-content/uploads/2022/08/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <style>
+    :root{
+      --teal:#008491;--tl:#00c9db;--tg:rgba(0,201,219,.25);
+      --or:#e87722;--ol:#ffa94d;--og:rgba(232,119,34,.25);
+      --gr:#78a22f;
+      --d:#060d1a;--d1:#0c1527;--d2:#111d33;
+      --t:#edf2f7;--td:#6e87a5;
+      --glass:rgba(255,255,255,.04);--gb:rgba(255,255,255,.06);
+      --r:20px;--mono:"JetBrains Mono",monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px}html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
+    body{font-family:"DM Sans",system-ui,sans-serif;background:var(--d);color:var(--t);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+    /* GRAIN */
+    body::after{content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.025;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+    /* FLOATING SHAPES */
+    .shape{position:fixed;border-radius:50%;pointer-events:none;z-index:-1;filter:blur(100px);will-change:transform}
+    .shape-1{width:500px;height:500px;background:rgba(0,132,145,.07);top:5%;left:-15%}
+    .shape-2{width:350px;height:350px;background:rgba(232,119,34,.05);bottom:15%;right:-12%}
+    .shape-3{width:300px;height:300px;background:rgba(0,201,219,.04);top:45%;left:35%}
+
+    /* CUSTOM CURSOR */
+    .cur{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--tl);pointer-events:none;z-index:9997;mix-blend-mode:difference;transform:translate(-50%,-50%);opacity:0;transition:width .25s cubic-bezier(.16,1,.3,1),height .25s cubic-bezier(.16,1,.3,1),opacity .3s}
+    .cur.on{opacity:1}.cur.big{width:44px;height:44px;background:rgba(0,201,219,.12);mix-blend-mode:normal;border:1px solid rgba(0,201,219,.3)}
+    @media(hover:none){.cur{display:none!important}}
+
+    /* LOADER */
+    .loader{position:fixed;inset:0;z-index:100;background:var(--d);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s cubic-bezier(.16,1,.3,1),visibility .6s}
+    .loader.done{opacity:0;visibility:hidden;pointer-events:none}
+    .loader-logo{height:32px;margin-bottom:24px;opacity:.5}
+    .loader-pct{font-family:var(--mono);font-size:clamp(36px,8vw,56px);font-weight:700;color:var(--tl);letter-spacing:-.03em;line-height:1}
+    .loader-pct::after{content:"%";font-size:.5em;opacity:.4;margin-left:2px}
+
+    /* HERO */
+    .hero{position:relative;height:100vh;height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .hero-vid{position:absolute;inset:0}.hero-vid video{width:100%;height:100%;object-fit:cover}
+    .hero-dim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,13,26,.4) 0%,rgba(6,13,26,.12) 30%,rgba(6,13,26,.75) 75%,var(--d) 100%),radial-gradient(ellipse at 30% 20%,rgba(0,132,145,.1),transparent 50%)}
+    .hero-c{position:relative;z-index:2;text-align:center;padding:0 24px;max-width:760px}
+    .hero-logo{height:38px;margin-bottom:30px;opacity:0;filter:drop-shadow(0 2px 20px rgba(0,0,0,.5))}
+    .hero h1{font-size:clamp(38px,9vw,76px);font-weight:900;line-height:.96;letter-spacing:-.045em}
+    .hero h1 .ln{display:block;overflow:hidden}.hero h1 .ln-i{display:block;transform:translateY(115%)}
+    .hero h1 .accent{background:linear-gradient(120deg,var(--tl),var(--ol));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero-sub{font-size:clamp(14px,2.2vw,17px);line-height:1.65;color:var(--td);max-width:440px;margin:20px auto 0;opacity:0;transform:translateY(16px)}
+    .hero-cta{display:inline-flex;align-items:center;gap:10px;margin-top:28px;padding:16px 32px;border-radius:999px;background:linear-gradient(135deg,var(--teal),var(--tl));color:#fff;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 0 0 0 var(--tg);opacity:0;transform:translateY(16px);transition:box-shadow .2s;animation:none}
+    .hero-cta.live{animation:ctaPulse 3s ease-in-out infinite}
+    .hero-cta:hover{box-shadow:0 12px 40px var(--tg)!important}
+    .hero-cta svg{width:16px;height:16px}
+    @keyframes ctaPulse{0%,100%{box-shadow:0 4px 20px var(--tg)}50%{box-shadow:0 4px 40px rgba(0,201,219,.4)}}
+    .scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;opacity:0;display:flex;flex-direction:column;align-items:center;gap:6px}
+    .scroll-hint span{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--td)}
+    .scroll-pill{width:18px;height:28px;border-radius:9px;border:1.5px solid rgba(255,255,255,.15);position:relative}
+    .scroll-pill::after{content:"";position:absolute;top:5px;left:50%;transform:translateX(-50%);width:2.5px;height:5px;border-radius:2px;background:var(--tl);animation:sd 1.8s ease-in-out infinite}
+    @keyframes sd{0%,100%{opacity:1;transform:translateX(-50%) translateY(0)}50%{opacity:.2;transform:translateX(-50%) translateY(8px)}}
+
+    /* BIG STAT */
+    .big-stat{padding:120px 24px 0;max-width:740px;margin:0 auto;text-align:center}
+    .big-stat-num{font-size:clamp(72px,16vw,140px);font-weight:900;letter-spacing:-.06em;line-height:.85;background:linear-gradient(135deg,var(--tl),var(--ol));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .big-stat-label{font-size:clamp(13px,1.8vw,16px);color:var(--td);margin-top:6px;font-weight:500}
+    .big-stat-sub{font-size:clamp(20px,3.5vw,30px);font-weight:800;letter-spacing:-.02em;line-height:1.15;margin-top:28px;max-width:500px;margin-left:auto;margin-right:auto}
+
+    /* TICKER */
+    .ticker-wrap{margin-top:80px;overflow:hidden;border-top:1px solid var(--gb);border-bottom:1px solid var(--gb);padding:14px 0;position:relative}
+    .ticker-wrap::before,.ticker-wrap::after{content:"";position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none}
+    .ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--d),transparent)}
+    .ticker-wrap::after{right:0;background:linear-gradient(-90deg,var(--d),transparent)}
+    .ticker{display:flex;gap:48px;animation:tick 28s linear infinite;width:max-content}
+    .ticker span{font-size:13px;font-weight:600;color:var(--td);white-space:nowrap;display:flex;align-items:center;gap:8px}
+    .ticker span::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--teal)}
+    @keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    /* SECTION */
+    .wrap{max-width:700px;margin:0 auto;padding:0 24px}
+    .section-head{padding-top:80px;margin-bottom:24px}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:999px;background:rgba(0,132,145,.08);border:1px solid rgba(0,132,145,.1);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tl);margin-bottom:14px}
+    .tag-dot{width:5px;height:5px;border-radius:50%;background:var(--teal)}
+    .s-title{font-size:clamp(26px,5vw,36px);font-weight:900;letter-spacing:-.03em;line-height:1.08}
+    .s-desc{font-size:15px;color:var(--td);line-height:1.6;margin-top:8px}
+
+    /* IMAGE CARDS */
+    .img-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .img-card{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/3.5;cursor:pointer;text-decoration:none;color:#fff;display:block;transform-style:preserve-3d;perspective:800px}
+    .img-card img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+    .img-card:hover img{transform:scale(1.06)}
+    .img-card-ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.82) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px}
+    .img-badge{display:inline-flex;align-self:flex-start;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+    .badge-teal{background:var(--teal)}.badge-orange{background:var(--or)}
+    .img-card-title{font-size:17px;font-weight:800;line-height:1.15}
+    .img-card-sub{font-size:12px;opacity:.8;margin-top:2px}
+    .img-card-stat{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:5px 10px;border-radius:6px;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);font-family:var(--mono);font-size:12px;font-weight:700;color:var(--tl)}
+
+    /* LIST CARDS */
+    .cards{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+    .card{display:flex;align-items:center;gap:14px;background:var(--d1);border-radius:14px;padding:15px 16px;text-decoration:none;color:var(--t);border:1px solid var(--gb);transition:all .25s cubic-bezier(.16,1,.3,1);cursor:pointer;position:relative;overflow:hidden}
+    .card::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,180,197,.03),transparent 60%);opacity:0;transition:opacity .25s}
+    .card:hover{border-color:rgba(0,180,197,.18);transform:translateX(4px);box-shadow:0 6px 24px rgba(0,0,0,.25)}
+    .card:hover::after{opacity:1}
+    .card-ic{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;position:relative;z-index:1}
+    .card-ic svg{width:20px;height:20px}
+    .ci-t{background:rgba(0,132,145,.1);color:var(--tl)}.ci-o{background:rgba(232,119,34,.1);color:var(--ol)}.ci-g{background:rgba(120,162,47,.1);color:#a0d450}.ci-b{background:rgba(63,154,195,.1);color:#5cb8e0}.ci-p{background:rgba(107,27,120,.1);color:#b44ec9}
+    .card-body{flex:1;min-width:0;position:relative;z-index:1}
+    .card-t{font-size:14px;font-weight:700;margin-bottom:1px}
+    .card-d{font-size:12px;color:var(--td);line-height:1.4}
+    .card-go{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:var(--glass);border:1px solid var(--gb);display:grid;place-items:center;transition:all .25s;position:relative;z-index:1}
+    .card-go svg{width:14px;height:14px;color:var(--td);transition:color .25s}
+    .card:hover .card-go{background:var(--teal);border-color:var(--teal);box-shadow:0 4px 14px var(--tg)}
+    .card:hover .card-go svg{color:#fff}
+
+    /* PARALLAX QUOTE BREAK */
+    .quote-break{position:relative;margin-top:80px;height:clamp(280px,40vw,380px);overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .quote-break-img{position:absolute;inset:-20%;width:140%;height:140%;object-fit:cover;filter:brightness(.35) saturate(.7)}
+    .quote-break-ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,132,145,.25),rgba(6,13,26,.6))}
+    .quote-break-c{position:relative;z-index:2;text-align:center;padding:0 32px;max-width:600px}
+    .quote-break-c blockquote{font-size:clamp(20px,3.5vw,28px);font-weight:800;line-height:1.2;letter-spacing:-.02em;font-style:italic}
+    .quote-break-c blockquote::before{content:"\201C";display:block;font-size:48px;line-height:1;opacity:.3;margin-bottom:8px;font-style:normal}
+    .quote-break-c cite{display:block;margin-top:14px;font-size:13px;font-style:normal;color:var(--td);font-weight:500}
+
+    /* DEPARTURE BOARD */
+    .departures{margin-top:80px;padding:0 24px;max-width:700px;margin-left:auto;margin-right:auto}
+    .dep-card{background:var(--d1);border-radius:var(--r);border:1px solid var(--gb);overflow:hidden}
+    .dep-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 12px;border-bottom:1px solid var(--gb)}
+    .dep-header-left{display:flex;align-items:center;gap:10px}
+    .dep-header-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.4);animation:blink 2s ease infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+    .dep-header-title{font-family:var(--mono);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t)}
+    .dep-header-from{font-family:var(--mono);font-size:11px;color:var(--td)}
+    .dep-cols{display:grid;grid-template-columns:1fr 120px 80px;gap:0;padding:8px 20px 4px;border-bottom:1px solid rgba(255,255,255,.03)}
+    .dep-col{font-family:var(--mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--td)}
+    .dep-col:last-child{text-align:right}
+    .dep-row{display:grid;grid-template-columns:1fr 120px 80px;gap:0;padding:10px 20px;border-bottom:1px solid rgba(255,255,255,.025);transition:background .2s;align-items:center}
+    .dep-row:last-child{border-bottom:none}
+    .dep-row:hover{background:rgba(0,201,219,.03)}
+    .dep-dest{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--t);display:flex;align-items:center;gap:8px}
+    .dep-mode{width:18px;height:18px;border-radius:4px;display:grid;place-items:center;flex-shrink:0}
+    .dep-mode--train{background:rgba(0,201,219,.12);color:var(--tl)}
+    .dep-mode--car{background:rgba(232,119,34,.12);color:var(--ol)}
+    .dep-time-wrap{display:flex;align-items:center;gap:3px}
+    .dep-flap{display:inline-flex;align-items:center;justify-content:center;background:#0a1220;border:1px solid rgba(255,255,255,.06);border-radius:4px;padding:3px 5px;font-family:var(--mono);font-size:14px;font-weight:700;color:var(--tl);min-width:24px;text-align:center;position:relative;overflow:hidden}
+    .dep-flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.4)}
+    .dep-unit{font-family:var(--mono);font-size:10px;color:var(--td);margin-left:2px}
+    .dep-status{font-family:var(--mono);font-size:11px;font-weight:700;text-align:right;text-transform:uppercase;letter-spacing:.04em}
+    .dep-status--go{color:#22c55e}.dep-status--freq{color:var(--tl)}
+    .dep-footer{padding:12px 20px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--gb)}
+    .dep-footer span{font-family:var(--mono);font-size:10px;color:var(--td);letter-spacing:.04em}
+
+    /* CTA SECTION */
+    .cta-section{padding:80px 24px;max-width:700px;margin:0 auto}
+    .cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .cta-card{position:relative;background:var(--d1);border-radius:var(--r);padding:32px 24px;border:1px solid var(--gb);overflow:hidden}
+    .cta-card::before{content:"";position:absolute;inset:0;pointer-events:none}
+    .cta-card--newsletter::before{background:radial-gradient(ellipse at 30% 20%,rgba(0,132,145,.06),transparent 60%)}
+    .cta-card--contact::before{background:radial-gradient(ellipse at 70% 80%,rgba(232,119,34,.05),transparent 60%)}
+    .cta-card h3{font-size:20px;font-weight:900;margin-bottom:6px;position:relative}
+    .cta-card .sub{font-size:13px;color:var(--td);line-height:1.5;margin-bottom:18px;position:relative}
+    .cta-tag{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;position:relative}
+    .cta-tag--teal{background:rgba(0,132,145,.1);border:1px solid rgba(0,132,145,.12);color:var(--tl)}
+    .cta-tag--orange{background:rgba(232,119,34,.1);border:1px solid rgba(232,119,34,.12);color:var(--ol)}
+    .signup-row{display:flex;gap:8px;position:relative}
+    .signup-row input{flex:1;padding:13px 14px;border-radius:11px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#fff;font-size:13px;font-family:inherit;outline:none;transition:border-color .2s,box-shadow .2s;min-width:0}
+    .signup-row input::placeholder{color:var(--td)}
+    .signup-row input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,180,197,.12)}
+    .signup-row button{padding:13px 20px;border-radius:11px;border:none;background:linear-gradient(135deg,var(--teal),var(--tl));color:#fff;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;box-shadow:0 4px 16px var(--tg);transition:transform .15s,box-shadow .15s}
+    .signup-row button:hover{transform:translateY(-2px);box-shadow:0 8px 28px var(--tg)}
+    .signup-fine{font-size:10px;color:var(--td);margin-top:8px;position:relative}
+    .signup-ok{display:none;padding:14px;border-radius:11px;background:rgba(120,162,47,.08);border:1px solid rgba(120,162,47,.12);color:#a0d450;font-size:14px;font-weight:700;position:relative}
+    .contact-actions{display:flex;flex-direction:column;gap:8px;position:relative}
+    .c-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid var(--gb);color:var(--t);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;text-decoration:none;transition:all .2s}
+    .c-btn:hover{background:rgba(0,180,197,.06);border-color:rgba(0,180,197,.15);transform:translateX(3px)}
+    .c-btn-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+    .c-btn-icon svg{width:18px;height:18px}
+    .c-btn-icon--teal{background:rgba(0,132,145,.1);color:var(--tl)}
+    .c-btn-icon--orange{background:rgba(232,119,34,.1);color:var(--ol)}
+    .c-btn-icon--green{background:rgba(120,162,47,.1);color:#a0d450}
+    .c-btn-text{display:flex;flex-direction:column}
+    .c-btn-label{font-size:14px;font-weight:700}
+    .c-btn-sub{font-size:11px;color:var(--td);font-weight:500}
+
+    /* FOOTER */
+    .footer{text-align:center;padding:0 24px 40px;font-size:12px;color:var(--td)}
+    .footer-line{width:48px;height:1px;background:var(--gb);margin:0 auto 24px}
+    .footer-logos{display:flex;align-items:center;justify-content:center;gap:28px;margin-bottom:20px;flex-wrap:wrap}
+    .footer-logos img{height:28px;opacity:.5;filter:brightness(0) invert(1);transition:opacity .2s}
+    .footer-logos img:hover{opacity:.8}
+    .footer a{color:var(--tl);text-decoration:none}
+    .footer-contact{margin-top:8px;opacity:.4;font-size:11px}
+    .footer-copy{margin-top:14px;opacity:.25;font-size:10px}
+
+    /* RESPONSIVE */
+    @media(max-width:520px){
+      .img-grid{grid-template-columns:1fr}
+      .cta-grid{grid-template-columns:1fr}
+      .signup-row{flex-direction:column}.signup-row button{width:100%}
+      .dep-cols,.dep-row{grid-template-columns:1fr 105px 70px;padding-left:14px;padding-right:14px}
+      .dep-header,.dep-footer{padding-left:14px;padding-right:14px}
+    }
+
+    .rv-up{opacity:0;transform:translateY(32px)}.rv-scale{opacity:0;transform:scale(.96)}.rv-left{opacity:0;transform:translateX(-20px)}.rv-clip{clip-path:circle(0% at 50% 50%)}
+  </style>
+</head>
+<body>
+  <div class="shape shape-1"></div><div class="shape shape-2"></div><div class="shape shape-3"></div>
+  <div class="cur" id="cur"></div>
+
+  <!-- LOADER -->
+  <div class="loader" id="loader">
+    <img class="loader-logo" src="https://businesskirklees.com/wp-content/uploads/2022/07/Business-Kirklees-icon-white.png" alt="">
+    <div class="loader-pct" id="loaderPct">0</div>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero" id="hero">
+    <div class="hero-vid">
+      <video id="heroVideo" muted loop playsinline poster="https://businesskirklees.com/wp-content/uploads/2026/03/22054_213_Aerial_Night-scaled.jpg">
+        <source src="https://businesskirklees.com/wp-content/uploads/2024/09/kirklees_v9_nographics-Original-1-1.mp4" type="video/mp4">
+      </video>
+      <div class="hero-dim"></div>
+    </div>
+    <div class="hero-c">
+      <img class="hero-logo" src="https://businesskirklees.com/wp-content/uploads/2022/07/Business-Kirklees-icon-white.png" alt="Business Kirklees">
+      <h1>
+        <span class="ln"><span class="ln-i">An exceptional</span></span>
+        <span class="ln"><span class="ln-i">place <span class="accent">to do</span></span></span>
+        <span class="ln"><span class="ln-i"><span class="accent">business.</span></span></span>
+      </h1>
+      <p class="hero-sub">Regeneration, investment and opportunity at the heart of the Northern Powerhouse.</p>
+      <a class="hero-cta magnetic" href="#projects">Explore<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></a>
+    </div>
+    <div class="scroll-hint" id="scrollHint"><span>Scroll</span><div class="scroll-pill"></div></div>
+  </header>
+
+  <!-- BIG STAT -->
+  <section class="big-stat" id="bigStatSection">
+    <div class="big-stat-num rv-up" id="bigNum">&pound;7.6bn</div>
+    <div class="big-stat-label rv-up">Annual economy</div>
+    <div class="big-stat-sub rv-up">Over &pound;500m of investment is transforming Kirklees into one of the North's most exciting places to do business.</div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>16,000 local businesses</span><span>40,000 graduates per year</span><span>2nd best place in the UK to start a business</span><span>&pound;210m Cultural Heart</span><span>&pound;250m Huddersfield Blueprint</span><span>&pound;200m Dewsbury Blueprint</span><span>&pound;70m Gigabit Fibre investment</span><span>7 million people within 1 hour</span>
+      <span>16,000 local businesses</span><span>40,000 graduates per year</span><span>2nd best place in the UK to start a business</span><span>&pound;210m Cultural Heart</span><span>&pound;250m Huddersfield Blueprint</span><span>&pound;200m Dewsbury Blueprint</span><span>&pound;70m Gigabit Fibre investment</span><span>7 million people within 1 hour</span>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <section class="wrap" id="projects">
+    <div class="section-head">
+      <div class="tag rv-up"><span class="tag-dot"></span>Regeneration</div>
+      <h2 class="s-title rv-up">Transforming our<br>town centres</h2>
+      <p class="s-desc rv-up">Ambitious blueprints backed by hundreds of millions in investment.</p>
+    </div>
+    <div class="img-grid">
+      <a class="img-card rv-clip" href="#">
+        <img src="https://businesskirklees.com/wp-content/uploads/2026/03/22054_213_Aerial_Night-scaled.jpg" alt="Huddersfield" loading="lazy">
+        <div class="img-card-ov">
+          <span class="img-badge badge-teal">Flagship</span>
+          <div class="img-card-title">Huddersfield Blueprint</div>
+          <div class="img-card-sub">Ten-year town centre vision</div>
+          <span class="img-card-stat">&pound;250m+</span>
+        </div>
+      </a>
+      <a class="img-card rv-clip" href="#">
+        <img src="https://businesskirklees.com/wp-content/uploads/2025/12/Marsden.jpg" alt="Dewsbury" loading="lazy">
+        <div class="img-card-ov">
+          <span class="img-badge badge-orange">Town Deal</span>
+          <div class="img-card-title">Dewsbury Blueprint</div>
+          <div class="img-card-sub">A town with distinction</div>
+          <span class="img-card-stat">&pound;200m</span>
+        </div>
+      </a>
+    </div>
+    <div class="cards">
+      <a class="card rv-left" href="#"><div class="card-ic ci-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c6-3 10-7 10-13a4 4 0 0 0-8-1 4 4 0 0 0-8 1c0 6 4 10 10 13z"/></svg></div><div class="card-body"><div class="card-t">The Cultural Heart</div><div class="card-d">&pound;210m cultural hub of leisure, arts and music.</div></div><div class="card-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg></div></a>
+      <a class="card rv-left" href="#"><div class="card-ic ci-o"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg></div><div class="card-body"><div class="card-t">Business Growth Support</div><div class="card-d">Expert advice and grants at every stage.</div></div><div class="card-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg></div></a>
+      <a class="card rv-left" href="#"><div class="card-ic ci-g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5"/></svg></div><div class="card-body"><div class="card-t">Skills &amp; Workforce</div><div class="card-d">40,000 graduates/year. University of Huddersfield.</div></div><div class="card-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg></div></a>
+      <a class="card rv-left" href="#"><div class="card-ic ci-b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div><div class="card-body"><div class="card-t">Inward Investment</div><div class="card-d">Development sites and commercial opportunities.</div></div><div class="card-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg></div></a>
+      <a class="card rv-left" href="#"><div class="card-ic ci-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg></div><div class="card-body"><div class="card-t">Gigabit Infrastructure</div><div class="card-d">&pound;70m digital connectivity investment.</div></div><div class="card-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg></div></a>
+    </div>
+  </section>
+
+  <!-- PARALLAX QUOTE BREAK -->
+  <div class="quote-break">
+    <img class="quote-break-img" src="https://businesskirklees.com/wp-content/uploads/2024/01/AdobeStock_377660040-scaled-1.jpeg" alt="" loading="lazy" id="quoteImg">
+    <div class="quote-break-ov"></div>
+    <div class="quote-break-c rv-up">
+      <blockquote>There has never been a more exciting time to live, work and invest in Kirklees.</blockquote>
+      <cite>Invest in Kirklees Brochure</cite>
+    </div>
+  </div>
+
+  <!-- DEPARTURE BOARD -->
+  <section class="departures" id="departures">
+    <div class="section-head">
+      <div class="tag rv-up"><span class="tag-dot"></span>Connectivity</div>
+      <h2 class="s-title rv-up">Perfectly placed</h2>
+      <p class="s-desc rv-up">At the centre of the Leeds, Manchester &amp; Sheffield triangle.</p>
+    </div>
+    <div class="dep-card rv-scale">
+      <div class="dep-header"><div class="dep-header-left"><div class="dep-header-dot"></div><span class="dep-header-title">Departures</span></div><span class="dep-header-from">From: Kirklees</span></div>
+      <div class="dep-cols"><span class="dep-col">Destination</span><span class="dep-col">Duration</span><span class="dep-col">Status</span></div>
+      <div class="dep-row"><div class="dep-dest"><span class="dep-mode dep-mode--train"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="3" width="16" height="14" rx="2"/><circle cx="8" cy="20" r="1"/><circle cx="16" cy="20" r="1"/></svg></span>Leeds</div><div class="dep-time-wrap"><span class="dep-flap">2</span><span class="dep-flap">5</span><span class="dep-unit">min</span></div><div class="dep-status dep-status--go">Direct</div></div>
+      <div class="dep-row"><div class="dep-dest"><span class="dep-mode dep-mode--car"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="9" width="18" height="8" rx="2"/><circle cx="7.5" cy="14" r="1.5"/><circle cx="16.5" cy="14" r="1.5"/></svg></span>Manchester</div><div class="dep-time-wrap"><span class="dep-flap">3</span><span class="dep-flap">5</span><span class="dep-unit">min</span></div><div class="dep-status dep-status--go">M62</div></div>
+      <div class="dep-row"><div class="dep-dest"><span class="dep-mode dep-mode--car"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="9" width="18" height="8" rx="2"/><circle cx="7.5" cy="14" r="1.5"/><circle cx="16.5" cy="14" r="1.5"/></svg></span>Sheffield</div><div class="dep-time-wrap"><span class="dep-flap">4</span><span class="dep-flap">0</span><span class="dep-unit">min</span></div><div class="dep-status dep-status--go">M1</div></div>
+      <div class="dep-row"><div class="dep-dest"><span class="dep-mode dep-mode--train"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="3" width="16" height="14" rx="2"/><circle cx="8" cy="20" r="1"/><circle cx="16" cy="20" r="1"/></svg></span>MCR Airport</div><div class="dep-time-wrap"><span class="dep-flap">5</span><span class="dep-flap">0</span><span class="dep-unit">min</span></div><div class="dep-status dep-status--freq">200+ dest</div></div>
+      <div class="dep-row"><div class="dep-dest"><span class="dep-mode dep-mode--train"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="3" width="16" height="14" rx="2"/><circle cx="8" cy="20" r="1"/><circle cx="16" cy="20" r="1"/></svg></span>London KGX</div><div class="dep-time-wrap"><span class="dep-flap">2</span><span class="dep-flap">:</span><span class="dep-flap">3</span><span class="dep-flap">0</span><span class="dep-unit">hrs</span></div><div class="dep-status dep-status--go">Direct</div></div>
+      <div class="dep-footer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--td)"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>All times approximate &middot; M1, M62 &amp; Transpennine routes</span></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-grid">
+      <div class="cta-card cta-card--newsletter rv-scale">
+        <span class="cta-tag cta-tag--teal">Newsletter</span>
+        <h3>Stay in the loop</h3>
+        <p class="sub">Monthly updates on regeneration progress, business support and investment opportunities.</p>
+        <form class="signup-row" id="signupForm"><input type="email" placeholder="you@email.com" required><button type="submit" class="magnetic">Subscribe</button></form>
+        <div class="signup-fine">No spam. Unsubscribe anytime.</div>
+        <div class="signup-ok" id="signupOk">You're in!</div>
+      </div>
+      <div class="cta-card cta-card--contact rv-scale">
+        <span class="cta-tag cta-tag--orange">Get in touch</span>
+        <h3>Contact us</h3>
+        <p class="sub">Our team is here to help with any business enquiry.</p>
+        <div class="contact-actions">
+          <a class="c-btn" id="saveContact" href="#"><div class="c-btn-icon c-btn-icon--teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div><div class="c-btn-text"><span class="c-btn-label">Save contact</span><span class="c-btn-sub">Add to your phone</span></div></a>
+          <a class="c-btn" href="mailto:business.enquiries@kirklees.gov.uk"><div class="c-btn-icon c-btn-icon--orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div><div class="c-btn-text"><span class="c-btn-label">Email us</span><span class="c-btn-sub">business.enquiries@kirklees.gov.uk</span></div></a>
+          <a class="c-btn" href="tel:01484221000"><div class="c-btn-icon c-btn-icon--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.11 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="c-btn-text"><span class="c-btn-label">Call us</span><span class="c-btn-sub">01484 221000</span></div></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-line"></div>
+    <div class="footer-logos">
+      <img src="https://businesskirklees.com/wp-content/uploads/2022/07/Business-Kirklees-icon-white.png" alt="Business Kirklees" height="28" style="filter:none;opacity:.5">
+      <img src="https://businesskirklees.com/wp-content/uploads/2024/01/WhiteLogoWithoutBounding-1.png" alt="Kirklees Council" height="24">
+      <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/09/HM_Government_logo.svg/1200px-HM_Government_logo.svg.png" alt="UK Government" height="22">
+    </div>
+    <p><a href="https://businesskirklees.com">businesskirklees.com</a></p>
+    <p class="footer-contact">business.enquiries@kirklees.gov.uk &middot; 01484 221000</p>
+    <p class="footer-copy">&copy; Kirklees Council 2026</p>
+  </footer>
+
+  <script>
+    // LENIS
+    const lenis=new Lenis({duration:1.2,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
+    function raf(t){lenis.raf(t);requestAnimationFrame(raf)}requestAnimationFrame(raf);
+    lenis.on("scroll",ScrollTrigger.update);
+    gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
+
+    // CUSTOM CURSOR
+    const cur=document.getElementById("cur");
+    if(window.matchMedia("(hover:hover)").matches){
+      document.addEventListener("mousemove",e=>{
+        gsap.to(cur,{x:e.clientX,y:e.clientY,duration:.35,ease:"power2.out"});
+        if(!cur.classList.contains("on"))cur.classList.add("on");
+      });
+      document.querySelectorAll("a,button,.card,.img-card,.c-btn").forEach(el=>{
+        el.addEventListener("mouseenter",()=>cur.classList.add("big"));
+        el.addEventListener("mouseleave",()=>cur.classList.remove("big"));
+      });
+    }
+
+    // MAGNETIC BUTTONS
+    document.querySelectorAll(".magnetic").forEach(el=>{
+      el.addEventListener("mousemove",e=>{
+        const r=el.getBoundingClientRect();
+        gsap.to(el,{x:(e.clientX-(r.left+r.width/2))*.2,y:(e.clientY-(r.top+r.height/2))*.2,duration:.3,ease:"power2.out"});
+      });
+      el.addEventListener("mouseleave",()=>gsap.to(el,{x:0,y:0,duration:.5,ease:"elastic.out(1,0.5)"}));
+    });
+
+    // FLOATING SHAPES PARALLAX
+    gsap.to(".shape-1",{y:-100,scrollTrigger:{trigger:"body",start:"top top",end:"bottom bottom",scrub:true}});
+    gsap.to(".shape-2",{y:60,x:-30,scrollTrigger:{trigger:"body",start:"top top",end:"bottom bottom",scrub:true}});
+    gsap.to(".shape-3",{y:-50,x:20,scrollTrigger:{trigger:"body",start:"top top",end:"bottom bottom",scrub:true}});
+
+    // LOADER
+    const loader=document.getElementById("loader"),loaderPct=document.getElementById("loaderPct"),heroVideo=document.getElementById("heroVideo");
+    let loaded=false;
+    function finishLoad(){
+      if(loaded)return;loaded=true;
+      gsap.to({v:parseFloat(loaderPct.textContent)||0},{v:100,duration:.5,ease:"power1.in",
+        onUpdate:function(){loaderPct.textContent=Math.round(this.targets()[0].v)},
+        onComplete:()=>setTimeout(()=>{loader.classList.add("done");heroVideo.play().catch(()=>{});runHero()},250)
+      });
+    }
+    let p=0;const pi=setInterval(()=>{p=Math.min(p+Math.random()*12,88);loaderPct.textContent=Math.round(p)},180);
+    heroVideo.addEventListener("canplaythrough",()=>{clearInterval(pi);finishLoad()});
+    setTimeout(()=>{clearInterval(pi);finishLoad()},2800);
+
+    // HERO ANIMATION
+    function runHero(){
+      const tl=gsap.timeline({defaults:{ease:"power3.out"}});
+      tl.to(".hero-logo",{opacity:1,duration:.5},0)
+        .to(".ln-i",{y:0,duration:.85,stagger:.12},.15)
+        .to(".hero-sub",{opacity:1,y:0,duration:.6},.75)
+        .to(".hero-cta",{opacity:1,y:0,duration:.6,onComplete:()=>document.querySelector(".hero-cta").classList.add("live")},.9)
+        .to("#scrollHint",{opacity:1,duration:.5},1.2);
+    }
+
+    // HERO PARALLAX
+    gsap.to(".hero-c",{y:-80,opacity:0,scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});
+    gsap.to(".hero-vid video",{scale:1.15,scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});
+
+    // REVEALS
+    gsap.utils.toArray(".rv-up").forEach(el=>{gsap.to(el,{opacity:1,y:0,duration:.7,ease:"power2.out",scrollTrigger:{trigger:el,start:"top 85%",once:true}})});
+    gsap.utils.toArray(".rv-scale").forEach(el=>{gsap.to(el,{opacity:1,scale:1,duration:.7,ease:"power2.out",scrollTrigger:{trigger:el,start:"top 85%",once:true}})});
+
+    // CLIP-PATH IMAGE REVEALS
+    gsap.utils.toArray(".rv-clip").forEach(el=>{
+      gsap.to(el,{clipPath:"circle(75% at 50% 50%)",duration:1,ease:"power3.out",scrollTrigger:{trigger:el,start:"top 80%",once:true}});
+    });
+
+    // STAGGERED CARDS
+    ScrollTrigger.create({trigger:".cards",start:"top 82%",once:true,onEnter:()=>{gsap.to(".rv-left",{opacity:1,x:0,duration:.45,stagger:.07,ease:"power2.out"})}});
+
+    // QUOTE BREAK PARALLAX
+    gsap.to("#quoteImg",{y:40,scrollTrigger:{trigger:".quote-break",start:"top bottom",end:"bottom top",scrub:true}});
+
+    // DEPARTURE BOARD FLIP
+    ScrollTrigger.create({trigger:"#departures .dep-card",start:"top 80%",once:true,onEnter:()=>{
+      document.querySelectorAll(".dep-row").forEach((row,i)=>{
+        row.querySelectorAll(".dep-flap").forEach(f=>{const final=f.textContent;let c=0;const chars="0123456789:";const iv=setInterval(()=>{f.textContent=chars[Math.floor(Math.random()*chars.length)];c++;if(c>8+i*3){f.textContent=final;clearInterval(iv)}},50)});
+        gsap.from(row,{opacity:0,x:-12,duration:.35,delay:i*.1,ease:"power2.out"});
+      });
+    }});
+
+    // SUBSCRIBE
+    document.getElementById("signupForm").addEventListener("submit",function(e){
+      e.preventDefault();
+      gsap.to(this,{opacity:0,y:-8,duration:.25,onComplete:()=>{this.style.display="none";document.querySelector(".signup-fine").style.display="none";const ok=document.getElementById("signupOk");ok.style.display="block";gsap.from(ok,{opacity:0,y:8,duration:.35})}});
+    });
+
+    // VCARD
+    document.getElementById("saveContact").addEventListener("click",function(e){
+      e.preventDefault();
+      const vc="BEGIN:VCARD\nVERSION:3.0\nFN:Business Kirklees\nORG:Kirklees Council\nTEL;TYPE=WORK:01484 221000\nEMAIL:business.enquiries@kirklees.gov.uk\nURL:https://businesskirklees.com\nNOTE:Business & Regeneration - Kirklees Council\nEND:VCARD";
+      const b=new Blob([vc],{type:"text/vcard"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download="Business-Kirklees.vcf";a.click();URL.revokeObjectURL(u);
+    });
+  </script>
+</body>
+</html>
