@@ -1,0 +1,6 @@
+name = "business-kirklees-capture"
+main = "src/index.js"
+compatibility_date = "2024-09-01"
+
+# Set via: npx wrangler secret put TEAMS_WEBHOOK_URL
+# (Power Automate webhook URL — see SETUP.md)
