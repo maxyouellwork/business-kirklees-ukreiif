@@ -440,7 +440,7 @@
     btt.addEventListener("click",()=>lenis.scrollTo(0));
 
     // CAPTURE FORM — posts to Cloudflare Worker which forwards to Power Automate (Teams webhook)
-    const CAPTURE_ENDPOINT = "https://business-kirklees-capture.maxyouell.workers.dev/";
+    const CAPTURE_ENDPOINT = "https://business-kirklees-capture.maxyouell-work.workers.dev/";
     document.getElementById("captureForm").addEventListener("submit",async function(e){
       e.preventDefault();
       const form=this,btn=form.querySelector("button"),input=form.querySelector("input"),fine=document.querySelector(".capture-fine");
