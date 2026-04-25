@@ -89,6 +89,8 @@
     .capture-row button{padding:14px 24px;border-radius:var(--r);border:none;background:var(--orange);color:#fff;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;white-space:nowrap;transition:background .15s}
     .capture-row button:hover{background:var(--orange-light)}
     .capture-fine{font-size:11px;color:var(--text-light);margin-top:6px}
+    .capture-fine a{color:var(--text-mid);text-decoration:underline;text-decoration-color:rgba(74,85,104,.3);text-underline-offset:2px}
+    .capture-fine a:hover{color:var(--orange);text-decoration-color:var(--orange)}
     .capture-ok{display:none;padding:14px;border-radius:var(--r);background:rgba(120,162,47,.1);border:1px solid rgba(120,162,47,.2);color:#3d7a1c;font-size:14px;font-weight:700}
     @media(max-width:520px){.capture-row{flex-direction:column}.capture-row button{width:100%}}
 
@@ -257,7 +259,7 @@
         <input type="email" placeholder="Your email" required>
         <button type="submit">Get investment pack</button>
       </form>
-      <div class="capture-fine">We'll send you our investment brochure and key contacts. No spam.</div>
+      <div class="capture-fine">We'll send you our investment pack and add you to our contact list. <a href="https://www.kirklees.gov.uk/beta/information-and-data/pdf/privacy-notice-business-investment-team.pdf" target="_blank" rel="noopener">Privacy notice</a>.</div>
       <div class="capture-ok" id="captureOk"></div>
     </div>
   </section>
