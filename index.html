@@ -94,6 +94,13 @@
     .capture-ok{display:none;padding:14px;border-radius:var(--r);background:rgba(120,162,47,.1);border:1px solid rgba(120,162,47,.2);color:#3d7a1c;font-size:14px;font-weight:700}
     @media(max-width:520px){.capture-row{flex-direction:column}.capture-row button{width:100%}}
 
+    /* DELEGATE MODE — hand-delivered QR, make form unmissable */
+    body.delegate-mode .capture{margin:44px auto 0;padding:28px 28px 24px;background:#fff;border:2px solid var(--orange);border-radius:18px;box-shadow:0 16px 48px rgba(212,104,26,.18),0 4px 12px rgba(0,0,0,.04);position:relative}
+    body.delegate-mode .capture::before{content:"Get your investment pack";display:block;font-family:var(--heading);font-weight:700;font-size:clamp(20px,3vw,26px);letter-spacing:-.01em;color:var(--text-dark);margin-bottom:14px}
+    body.delegate-mode .capture-row input{padding:18px 18px;font-size:16px;border-width:1.5px}
+    body.delegate-mode .capture-row button{padding:18px 28px;font-size:16px}
+    body.delegate-mode .capture-fine{margin-top:10px}
+
     /* STATS GRID */
     .stats-section{background:var(--cream);padding:48px 24px 64px}
     .stats-grid{max-width:680px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--cream-dark);border-radius:var(--r);overflow:hidden}
@@ -387,6 +394,11 @@
   </footer>
 
   <script>
+    // Per-delegate QR — short codes on lanyards, e.g. ?d=js for Jess.
+    // Codes: js Jess, jb James, cd Chris, tf Thomas, jo Joanne, ds Shepherd, dw Wildman, pj Phil
+    const DELEGATE_CODE = (new URLSearchParams(location.search).get("d") || "").toLowerCase().slice(0,8);
+    if(DELEGATE_CODE) document.body.classList.add("delegate-mode");
+
     const lenis=new Lenis({duration:1.2,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
     function raf(t){lenis.raf(t);requestAnimationFrame(raf)}requestAnimationFrame(raf);
     lenis.on("scroll",ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
@@ -400,7 +412,14 @@
     setTimeout(()=>{
       loaderEl.classList.add("out");
       heroVideo.play().catch(()=>{});
-      setTimeout(()=>{loaderEl.classList.add("hide");runHero()},600);
+      setTimeout(()=>{
+        loaderEl.classList.add("hide");
+        runHero();
+        // Delegate mode: scroll past the hero straight to the form so it's the first thing they see.
+        if(DELEGATE_CODE){
+          setTimeout(()=>lenis.scrollTo("#captureForm",{offset:-160,duration:1.4}),700);
+        }
+      },600);
     },800);
 
     // HERO
@@ -449,7 +468,8 @@
       const email=input.value.trim();if(!email)return;
       btn.disabled=true;const orig=btn.textContent;btn.textContent="Sending…";
       try{
-        const res=await fetch(CAPTURE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,source:"ukreiif-landing"})});
+        const source=DELEGATE_CODE?`delegate-${DELEGATE_CODE}`:"ukreiif-landing";
+        const res=await fetch(CAPTURE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,source})});
         if(!res.ok)throw new Error("send failed");
         gsap.to(form,{opacity:0,y:-8,duration:.25,onComplete:()=>{
           form.style.display="none";fine.style.display="none";
