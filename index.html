@@ -94,21 +94,36 @@
     .capture-ok{display:none;padding:14px;border-radius:var(--r);background:rgba(120,162,47,.1);border:1px solid rgba(120,162,47,.2);color:#3d7a1c;font-size:14px;font-weight:700}
     @media(max-width:520px){.capture-row{flex-direction:column}.capture-row button{width:100%}}
 
-    /* DELEGATE MODE — hand-delivered QR. Show who introduced them + make form unmissable. */
-    body.delegate-mode .capture{margin:44px auto 0;padding:24px 28px;background:#fff;border:2px solid var(--orange);border-radius:18px;box-shadow:0 16px 48px rgba(212,104,26,.18),0 4px 12px rgba(0,0,0,.04);position:relative}
-    body.delegate-mode .capture-row input{padding:18px 18px;font-size:16px;border-width:1.5px}
-    body.delegate-mode .capture-row button{padding:18px 28px;font-size:16px}
-    body.delegate-mode .capture-fine{margin-top:10px}
-
-    .delegate-intro{display:none;align-items:center;gap:16px;padding:0 0 20px;margin-bottom:20px;border-bottom:1px solid rgba(0,0,0,.06)}
-    body.delegate-mode .delegate-intro{display:flex}
-    .delegate-avatar{flex:0 0 52px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-light) 100%);color:#fff;display:grid;place-items:center;font-family:var(--heading);font-weight:700;font-size:18px;letter-spacing:-.02em;box-shadow:0 4px 12px rgba(212,104,26,.25)}
-    .delegate-info{flex:1;min-width:0}
-    .delegate-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:2px}
-    .delegate-name{font-family:var(--heading);font-weight:700;font-size:clamp(18px,2.4vw,22px);letter-spacing:-.01em;color:var(--text-dark);line-height:1.15;margin-bottom:2px}
-    .delegate-role{font-size:13px;color:var(--text-mid);margin-bottom:5px}
-    .delegate-link{font-size:13px;color:var(--orange);text-decoration:none;font-weight:600;word-break:break-all}
-    .delegate-link:hover{text-decoration:underline}
+    /* DELEGATE MODAL — when ?d=<code> matches a known delegate */
+    .dlg-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;animation:dlgFade .3s ease}
+    .dlg-modal[hidden]{display:none}
+    .dlg-backdrop{position:absolute;inset:0;background:rgba(17,24,39,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+    .dlg-card{position:relative;background:#fff;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.15);width:100%;max-width:460px;max-height:calc(100vh - 40px);overflow-y:auto;animation:dlgUp .4s cubic-bezier(.16,1,.3,1)}
+    .dlg-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:none;background:rgba(0,0,0,.05);color:var(--text-mid);font-size:20px;line-height:1;cursor:pointer;display:grid;place-items:center;z-index:2;padding:0}
+    .dlg-close:hover{background:rgba(0,0,0,.1);color:var(--text-dark)}
+    .dlg-header{padding:22px 24px 18px;border-bottom:1px solid rgba(0,0,0,.06);display:flex;gap:14px;align-items:center}
+    .dlg-avatar{flex:0 0 52px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-light) 100%);color:#fff;display:grid;place-items:center;font-family:var(--heading);font-weight:700;font-size:18px;letter-spacing:-.02em;box-shadow:0 4px 12px rgba(212,104,26,.25)}
+    .dlg-info{flex:1;min-width:0}
+    .dlg-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:2px}
+    .dlg-name{font-family:var(--heading);font-weight:700;font-size:18px;letter-spacing:-.01em;color:var(--text-dark);line-height:1.2;margin-bottom:2px}
+    .dlg-role{font-size:13px;color:var(--text-mid);margin-bottom:4px}
+    .dlg-mail{font-size:12px;color:var(--orange);text-decoration:none;font-weight:600;word-break:break-all}
+    .dlg-mail:hover{text-decoration:underline}
+    .dlg-body{padding:22px 24px 22px}
+    .dlg-title{font-family:var(--heading);font-weight:700;font-size:22px;letter-spacing:-.01em;color:var(--text-dark);margin-bottom:16px}
+    .dlg-form{display:grid;gap:14px}
+    .dlg-row label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-mid);margin-bottom:5px}
+    .dlg-row input{display:block;width:100%;padding:12px 14px;font-size:15px;font-family:var(--sans);border:1.5px solid var(--cream-dark);border-radius:var(--r);background:#fff;color:var(--text-dark);outline:none;transition:border-color .2s}
+    .dlg-row input:focus{border-color:var(--orange)}
+    .dlg-submit{margin-top:4px;padding:15px 20px;font-size:15px;font-weight:700;font-family:var(--sans);border:none;border-radius:var(--r);background:var(--orange);color:#fff;cursor:pointer;transition:background .15s;box-shadow:0 4px 16px rgba(212,104,26,.3)}
+    .dlg-submit:hover{background:var(--orange-light)}
+    .dlg-submit:disabled{opacity:.6;cursor:wait}
+    .dlg-fine{font-size:11px;color:var(--text-light);margin-top:14px}
+    .dlg-fine a{color:var(--text-mid);text-decoration:underline;text-decoration-color:rgba(74,85,104,.3);text-underline-offset:2px}
+    .dlg-fine a:hover{color:var(--orange);text-decoration-color:var(--orange)}
+    .dlg-ok{display:none;padding:16px;border-radius:var(--r);background:rgba(120,162,47,.1);border:1px solid rgba(120,162,47,.2);color:#3d7a1c;font-size:14px;font-weight:600;line-height:1.4}
+    @keyframes dlgFade{from{opacity:0}to{opacity:1}}
+    @keyframes dlgUp{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 
     /* STATS GRID */
     .stats-section{background:var(--cream);padding:48px 24px 64px}
@@ -246,6 +261,34 @@
   <!-- LOADER -->
   <div class="loader" id="loader"><img class="loader-logo" id="loaderLogo" src="https://businesskirklees.com/wp-content/uploads/2022/07/Business-Kirklees-icon-white.png" alt=""></div>
 
+  <!-- DELEGATE MODAL -->
+  <div class="dlg-modal" id="dlgModal" hidden>
+    <div class="dlg-backdrop" data-close></div>
+    <div class="dlg-card" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+      <button class="dlg-close" type="button" aria-label="Close" data-close>&times;</button>
+      <div class="dlg-header">
+        <div class="dlg-avatar" id="dlgAvatar"></div>
+        <div class="dlg-info">
+          <div class="dlg-eyebrow">Introduced by</div>
+          <div class="dlg-name" id="dlgName"></div>
+          <div class="dlg-role" id="dlgRole"></div>
+          <a class="dlg-mail" id="dlgMail"></a>
+        </div>
+      </div>
+      <div class="dlg-body">
+        <h3 class="dlg-title" id="dlgTitle">Get your investment pack</h3>
+        <form id="dlgForm" class="dlg-form" autocomplete="on">
+          <div class="dlg-row"><label for="dlgInName">Name</label><input id="dlgInName" name="name" type="text" required autocomplete="name"></div>
+          <div class="dlg-row"><label for="dlgInCompany">Company</label><input id="dlgInCompany" name="company" type="text" required autocomplete="organization"></div>
+          <div class="dlg-row"><label for="dlgInEmail">Email</label><input id="dlgInEmail" name="email" type="email" required autocomplete="email"></div>
+          <button type="submit" class="dlg-submit">Get my pack</button>
+        </form>
+        <div class="dlg-fine" id="dlgFine">We'll send you our investment pack and add you to our contact list. <a href="https://www.kirklees.gov.uk/beta/information-and-data/pdf/privacy-notice-business-investment-team.pdf" target="_blank" rel="noopener">Privacy notice</a>.</div>
+        <div class="dlg-ok" id="dlgOk"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- HERO -->
   <header class="hero">
     <div class="hero-vid"><video id="heroVideo" muted loop playsinline poster="https://businesskirklees.com/wp-content/uploads/2026/03/22054_213_Aerial_Night-scaled.jpg"><source src="https://businesskirklees.com/wp-content/uploads/2024/09/kirklees_v9_nographics-Original-1-1.mp4" type="video/mp4"></video><div class="hero-dim"></div></div>
@@ -271,15 +314,6 @@
       </div>
     </div>
     <div class="capture rv-up">
-      <div class="delegate-intro" id="delegateIntro">
-        <div class="delegate-avatar" id="delegateAvatar"></div>
-        <div class="delegate-info">
-          <div class="delegate-eyebrow">Introduced by</div>
-          <div class="delegate-name" id="delegateName"></div>
-          <div class="delegate-role" id="delegateRole"></div>
-          <a class="delegate-link" id="delegateEmail"></a>
-        </div>
-      </div>
       <form class="capture-row" id="captureForm">
         <input type="email" placeholder="Your email" required>
         <button type="submit">Get investment pack</button>
@@ -425,16 +459,6 @@
     };
     const DELEGATE_CODE=(new URLSearchParams(location.search).get("d")||"").toLowerCase().slice(0,8);
     const DELEGATE=DELEGATES[DELEGATE_CODE];
-    if(DELEGATE){
-      document.body.classList.add("delegate-mode");
-      const initials=DELEGATE.name.split(" ").map(s=>s[0]).join("").slice(0,2).toUpperCase();
-      document.getElementById("delegateAvatar").textContent=initials;
-      document.getElementById("delegateName").textContent=DELEGATE.name;
-      document.getElementById("delegateRole").textContent=DELEGATE.role;
-      const emailEl=document.getElementById("delegateEmail");
-      emailEl.textContent=DELEGATE.email;
-      emailEl.href=`mailto:${DELEGATE.email}`;
-    }
 
     const lenis=new Lenis({duration:1.2,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
     function raf(t){lenis.raf(t);requestAnimationFrame(raf)}requestAnimationFrame(raf);
@@ -449,14 +473,7 @@
     setTimeout(()=>{
       loaderEl.classList.add("out");
       heroVideo.play().catch(()=>{});
-      setTimeout(()=>{
-        loaderEl.classList.add("hide");
-        runHero();
-        // Delegate mode: scroll past the hero straight to the form so it's the first thing they see.
-        if(DELEGATE){
-          setTimeout(()=>lenis.scrollTo("#captureForm",{offset:-200,duration:1.4}),700);
-        }
-      },600);
+      setTimeout(()=>{loaderEl.classList.add("hide");runHero()},600);
     },800);
 
     // HERO
@@ -519,6 +536,43 @@
         fine.textContent="Something went wrong — please try again or email invest@kirklees.gov.uk";fine.style.color="#c53030";
       }
     });
+
+    // DELEGATE MODAL — auto-opens when ?d=<code> matches a known delegate; dismissable.
+    if(DELEGATE){
+      const dlg=document.getElementById("dlgModal");
+      document.getElementById("dlgAvatar").textContent=DELEGATE.name.split(" ").map(s=>s[0]).join("").slice(0,2).toUpperCase();
+      document.getElementById("dlgName").textContent=DELEGATE.name;
+      document.getElementById("dlgRole").textContent=DELEGATE.role;
+      const dlgMail=document.getElementById("dlgMail");
+      dlgMail.textContent=DELEGATE.email;
+      dlgMail.href=`mailto:${DELEGATE.email}`;
+
+      const showDlg=()=>{dlg.hidden=false;setTimeout(()=>document.getElementById("dlgInName").focus(),320)};
+      const hideDlg=()=>{dlg.hidden=true};
+      dlg.addEventListener("click",e=>{if(e.target.matches("[data-close]"))hideDlg()});
+      document.addEventListener("keydown",e=>{if(!dlg.hidden&&e.key==="Escape")hideDlg()});
+      // Auto-open after the loader/hero settles
+      setTimeout(showDlg,1600);
+
+      document.getElementById("dlgForm").addEventListener("submit",async function(e){
+        e.preventDefault();
+        const data=Object.fromEntries(new FormData(this));
+        const btn=this.querySelector("button[type=submit]");
+        const fine=document.getElementById("dlgFine");
+        btn.disabled=true;const orig=btn.textContent;btn.textContent="Sending…";
+        try{
+          const res=await fetch(CAPTURE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...data,source:`delegate-${DELEGATE_CODE}`})});
+          if(!res.ok)throw new Error("send failed");
+          this.style.display="none";fine.style.display="none";
+          const ok=document.getElementById("dlgOk");ok.style.display="block";ok.textContent=`Thanks ${data.name.split(" ")[0]} — check your inbox for the investment pack.`;
+          confetti({particleCount:60,spread:70,origin:{y:.45},colors:["#d4681a","#e8842f","#78a22f","#1a2234"]});
+          setTimeout(hideDlg,3500);
+        }catch(err){
+          btn.disabled=false;btn.textContent=orig;
+          fine.textContent="Something went wrong — please try again or email invest@kirklees.gov.uk";fine.style.color="#c53030";
+        }
+      });
+    }
 
     // SHARE
     document.getElementById("shareBtn").addEventListener("click",async()=>{

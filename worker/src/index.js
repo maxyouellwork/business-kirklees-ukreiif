@@ -42,6 +42,8 @@ export default {
     }
 
     const email = String(body.email || "").trim();
+    const name = String(body.name || "").trim().slice(0, 100);
+    const company = String(body.company || "").trim().slice(0, 150);
     const source = String(body.source || "ukreiif-landing").slice(0, 64);
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
@@ -50,6 +52,8 @@ export default {
 
     const payload = {
       email,
+      name,
+      company,
       source,
       submittedAt: new Date().toISOString(),
       userAgent: request.headers.get("user-agent") || "",
