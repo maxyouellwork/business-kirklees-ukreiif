@@ -92,69 +92,15 @@
     align-items:center;
   }
   .pack{
-    width:280px;
-    height:380px;
-    background:linear-gradient(155deg,#243044 0%,#1a2234 100%);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:8px;
+    height:480px;
+    width:auto;
+    transform:rotate(4deg);
     box-shadow:
       0 4px 8px rgba(0,0,0,.3),
-      0 30px 60px rgba(0,0,0,.5),
-      0 60px 120px rgba(0,0,0,.4);
-    position:relative;
-    transform:rotate(4deg);
-    overflow:hidden;
-    padding:32px 24px;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-  }
-  .pack::before{
-    content:"";
-    position:absolute;
-    top:0;left:0;right:0;
-    height:6px;
-    background:#d4681a;
-  }
-  .pack-tag{
-    font-size:10px;font-weight:700;
-    letter-spacing:.18em;text-transform:uppercase;
-    color:#00c9db;
-    margin-bottom:auto;
-  }
-  .pack-title{
-    font-family:"VAG",sans-serif;
-    font-weight:700;
-    font-size:34px;
-    line-height:.92;
-    letter-spacing:-.02em;
-    color:#f5f0eb;
-    margin-bottom:14px;
-  }
-  .pack-title em{
-    font-style:normal;
-    color:#e8842f;
-  }
-  .pack-stat{
-    font-family:"VAG",sans-serif;
-    font-size:42px;font-weight:700;
-    color:#d4681a;
-    margin-bottom:2px;
-    letter-spacing:-.03em;
-  }
-  .pack-stat-lbl{
-    font-size:10px;
-    color:rgba(245,240,235,.5);
-    text-transform:uppercase;
-    letter-spacing:.12em;
-  }
-  .pack-foot{
-    margin-top:18px;
-    padding-top:14px;
-    border-top:1px solid rgba(255,255,255,.08);
-    font-size:11px;
-    color:rgba(245,240,235,.4);
-    letter-spacing:.04em;
+      0 30px 60px rgba(0,0,0,.55),
+      0 60px 120px rgba(0,0,0,.45);
+    border-radius:6px;
+    display:block;
   }
 </style>
 </head>
@@ -172,15 +118,7 @@
   </div>
 
   <div class="right">
-    <div class="pack">
-      <div class="pack-tag">UKREiiF · 2026</div>
-      <div>
-        <div class="pack-title">Invest in <em>Kirklees</em></div>
-        <div class="pack-stat">£3.5bn</div>
-        <div class="pack-stat-lbl">Ongoing investment</div>
-      </div>
-      <div class="pack-foot">businesskirklees.com</div>
-    </div>
+    <img class="pack" src="brochure-cover.png" alt="Invest in Huddersfield brochure cover">
   </div>
 </body>
 </html>

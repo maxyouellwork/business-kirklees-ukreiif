@@ -1,11 +1,18 @@
+// Renders email-pack-preview.html → email-pack.png (1200x630 @ 2x).
+// Auto-downloads the brochure PDF and extracts page 1 as brochure-cover.png
+// (gitignored). Requires: puppeteer, poppler (`brew install poppler`).
 import puppeteer from 'puppeteer';
 import { createServer } from 'http';
-import { readFileSync, existsSync, statSync } from 'fs';
+import { readFileSync, existsSync, statSync, writeFileSync, renameSync, unlinkSync } from 'fs';
 import { resolve, extname, join } from 'path';
+import { execSync } from 'child_process';
 
 const PROJECT_ROOT = resolve(import.meta.dirname);
 const HTML_PATH = '/email-pack-preview.html';
 const OUTPUT_PNG = resolve(PROJECT_ROOT, 'email-pack.png');
+const COVER_PNG = resolve(PROJECT_ROOT, 'brochure-cover.png');
+const PDF_PATH = resolve(PROJECT_ROOT, 'brochure.pdf');
+const PDF_URL = 'https://businesskirklees.com/wp-content/uploads/2025/10/invest-in-huddersfield-brochure-2025.pdf';
 
 const MIME = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
@@ -14,6 +21,18 @@ const MIME = {
   '.woff': 'font/woff', '.woff2': 'font/woff2',
   '.ttf': 'font/ttf', '.otf': 'font/otf',
 };
+
+async function ensureCover() {
+  if (existsSync(COVER_PNG)) return;
+  console.log('Downloading brochure PDF…');
+  const res = await fetch(PDF_URL);
+  if (!res.ok) throw new Error(`PDF fetch failed: ${res.status}`);
+  writeFileSync(PDF_PATH, Buffer.from(await res.arrayBuffer()));
+  console.log('Extracting page 1…');
+  execSync(`pdftoppm -r 220 -f 1 -l 1 -png "${PDF_PATH}" "${PROJECT_ROOT}/brochure-cover"`);
+  renameSync(`${PROJECT_ROOT}/brochure-cover-01.png`, COVER_PNG);
+  unlinkSync(PDF_PATH);
+}
 
 function startServer(port) {
   return new Promise((res) => {
@@ -34,6 +53,8 @@ function startServer(port) {
 }
 
 async function main() {
+  await ensureCover();
+
   const PORT = 9879;
   const server = await startServer(PORT);
 
