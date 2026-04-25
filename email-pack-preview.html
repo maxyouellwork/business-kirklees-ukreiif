@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @font-face{font-family:"VAG";src:url("fonts/vag-bold.ttf");font-weight:700}
+  @font-face{font-family:"VAG";src:url("fonts/vag-light.ttf");font-weight:300}
+  @font-face{font-family:"DIN";src:url("fonts/din-regular.otf");font-weight:400}
+  @font-face{font-family:"DIN";src:url("fonts/din-bold.otf");font-weight:700}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{
+    font-family:"DIN",system-ui,sans-serif;
+    background:#1a2234;
+    color:#f5f0eb;
+    position:relative;
+    display:flex;
+    align-items:center;
+    padding:0 80px;
+  }
+  .bg-glow{
+    position:absolute;
+    top:-200px;right:-200px;
+    width:700px;height:700px;
+    background:radial-gradient(circle,rgba(212,104,26,.35) 0%,rgba(212,104,26,0) 65%);
+    pointer-events:none;
+  }
+  .bg-glow-2{
+    position:absolute;
+    bottom:-300px;left:-200px;
+    width:800px;height:800px;
+    background:radial-gradient(circle,rgba(0,201,219,.18) 0%,rgba(0,201,219,0) 65%);
+    pointer-events:none;
+  }
+  .left{
+    position:relative;
+    z-index:2;
+    flex:1.3;
+    padding-right:40px;
+  }
+  .badge{
+    display:inline-flex;align-items:center;gap:9px;
+    padding:8px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);
+    font-size:13px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;
+    color:rgba(245,240,235,.7);
+    margin-bottom:32px;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:#d4681a}
+  h1{
+    font-family:"VAG",sans-serif;
+    font-weight:700;
+    font-size:78px;
+    line-height:.95;
+    letter-spacing:-.025em;
+    color:#f5f0eb;
+    margin-bottom:22px;
+  }
+  h1 em{
+    font-style:normal;
+    background:linear-gradient(120deg,#00c9db,#e8842f);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .sub{
+    font-size:21px;
+    line-height:1.45;
+    color:rgba(245,240,235,.75);
+    margin-bottom:38px;
+    max-width:540px;
+  }
+  .cta{
+    display:inline-flex;align-items:center;gap:14px;
+    padding:20px 32px;
+    background:#d4681a;
+    color:#fff;
+    border-radius:14px;
+    font-size:18px;font-weight:700;
+    box-shadow:0 8px 28px rgba(212,104,26,.45);
+  }
+  .cta svg{width:20px;height:20px}
+  .right{
+    position:relative;
+    z-index:2;
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .pack{
+    width:280px;
+    height:380px;
+    background:linear-gradient(155deg,#243044 0%,#1a2234 100%);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:8px;
+    box-shadow:
+      0 4px 8px rgba(0,0,0,.3),
+      0 30px 60px rgba(0,0,0,.5),
+      0 60px 120px rgba(0,0,0,.4);
+    position:relative;
+    transform:rotate(4deg);
+    overflow:hidden;
+    padding:32px 24px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .pack::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;right:0;
+    height:6px;
+    background:#d4681a;
+  }
+  .pack-tag{
+    font-size:10px;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;
+    color:#00c9db;
+    margin-bottom:auto;
+  }
+  .pack-title{
+    font-family:"VAG",sans-serif;
+    font-weight:700;
+    font-size:34px;
+    line-height:.92;
+    letter-spacing:-.02em;
+    color:#f5f0eb;
+    margin-bottom:14px;
+  }
+  .pack-title em{
+    font-style:normal;
+    color:#e8842f;
+  }
+  .pack-stat{
+    font-family:"VAG",sans-serif;
+    font-size:42px;font-weight:700;
+    color:#d4681a;
+    margin-bottom:2px;
+    letter-spacing:-.03em;
+  }
+  .pack-stat-lbl{
+    font-size:10px;
+    color:rgba(245,240,235,.5);
+    text-transform:uppercase;
+    letter-spacing:.12em;
+  }
+  .pack-foot{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid rgba(255,255,255,.08);
+    font-size:11px;
+    color:rgba(245,240,235,.4);
+    letter-spacing:.04em;
+  }
+</style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+  <div class="bg-glow-2"></div>
+
+  <div class="left">
+    <div class="badge"><span class="dot"></span>Investment pack</div>
+    <h1>Your <em>Kirklees</em><br>investment pack.</h1>
+    <p class="sub">£3.5bn of ongoing investment. Live regeneration sites, key sectors, and how to talk to the team.</p>
+    <span class="cta">Open the pack
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </span>
+  </div>
+
+  <div class="right">
+    <div class="pack">
+      <div class="pack-tag">UKREiiF · 2026</div>
+      <div>
+        <div class="pack-title">Invest in <em>Kirklees</em></div>
+        <div class="pack-stat">£3.5bn</div>
+        <div class="pack-stat-lbl">Ongoing investment</div>
+      </div>
+      <div class="pack-foot">businesskirklees.com</div>
+    </div>
+  </div>
+</body>
+</html>
