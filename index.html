@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -35,6 +35,42 @@
     html{font-size:16px}html.lenis,html.lenis body{height:auto}.lenis.lenis-smooth{scroll-behavior:auto!important}
     body{font-family:var(--sans);background:var(--cream);color:var(--text-dark);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
+    /* ===== A11Y BASELINE ===== */
+    /* Visually hidden but available to screen readers */
+    .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    /* Skip-to-content link — visible on keyboard focus only */
+    .skip-link{position:absolute;top:-40px;left:8px;z-index:200;padding:10px 16px;background:var(--orange);color:#fff;font-size:14px;font-weight:700;text-decoration:none;border-radius:6px;transition:top .15s}
+    .skip-link:focus{top:8px;outline:3px solid #fff;outline-offset:2px}
+    /* Global :focus-visible — visible high-contrast outline on every interactive */
+    a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{
+      outline:3px solid var(--orange-light);
+      outline-offset:2px;
+      border-radius:4px;
+    }
+    /* On dark backgrounds, the cream outline is more visible */
+    .hero a:focus-visible,.hero button:focus-visible,
+    .projects-section a:focus-visible,.projects-section button:focus-visible,
+    .biz-section a:focus-visible,.biz-section button:focus-visible,
+    .footer a:focus-visible,.footer button:focus-visible,
+    .delegate-splash button:focus-visible,
+    .dep-content a:focus-visible{
+      outline-color:#fff;
+    }
+    /* Honour reduced-motion */
+    @media (prefers-reduced-motion: reduce){
+      *,*::before,*::after{
+        animation-duration:.001s!important;
+        animation-iteration-count:1!important;
+        transition-duration:.001s!important;
+        scroll-behavior:auto!important;
+      }
+      .scroll-pill::after{animation:none!important}
+      /* Force-show elements that GSAP would normally fade in */
+      .hero-badge,.hero-logo,.hero-sub,.hero-cta,.scroll-hint,
+      .rv-up,.rv-scale,.rv-left{opacity:1!important;transform:none!important}
+      .ln-i{transform:none!important}
+    }
+
     /* PROGRESS BAR */
     #progressBar{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--orange);z-index:99;pointer-events:none}
 
@@ -52,19 +88,25 @@
     /* ===== HERO (dark, left-aligned) ===== */
     .hero{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--navy-deep)}
     .hero-vid{position:absolute;inset:0}.hero-vid video{width:100%;height:100%;object-fit:cover}
-    .hero-dim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,24,39,.4) 0%,rgba(17,24,39,.15) 30%,rgba(17,24,39,.75) 75%,var(--navy-deep) 100%)}
+    /* Stronger overlay for AA contrast — keeps the city visible while the white H1 stays readable on every frame */
+    .hero-dim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,24,39,.65) 0%,rgba(17,24,39,.55) 35%,rgba(17,24,39,.7) 65%,rgba(17,24,39,.92) 88%,var(--navy-deep) 100%)}
+    .hero-dim::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(17,24,39,.35) 0%,rgba(17,24,39,0) 70%)}
     .hero-c{position:relative;z-index:2;padding:0 24px;max-width:720px;text-align:center}
-    .hero-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-cream-dim);margin-bottom:24px;opacity:0}
+    .hero-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(245,240,235,.85);margin-bottom:24px;opacity:0}
     .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--orange)}
     .hero-logo{height:36px;margin-bottom:28px;opacity:0;display:block;margin-left:auto;margin-right:auto}
     .hero h1{font-family:var(--heading);font-size:clamp(38px,8vw,68px);font-weight:900;line-height:1.02;letter-spacing:-.02em;color:var(--cream)}
     .hero h1 .ln{display:block;overflow:hidden}.hero h1 .ln-i{display:block;transform:translateY(110%)}
     .hero h1 em{font-style:normal;background:linear-gradient(120deg,var(--tl),var(--orange-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .hero-sub{font-size:clamp(15px,2vw,18px);line-height:1.6;color:var(--text-cream-dim);max-width:460px;margin:16px auto 0;opacity:0;transform:translateY(14px)}
-    .hero-cta{display:inline-flex;align-items:center;gap:10px;margin-top:24px;padding:14px 28px;border-radius:var(--r);background:var(--orange);color:#fff;font-size:15px;font-weight:700;text-decoration:none;border:none;box-shadow:0 4px 16px rgba(212,104,26,.3);opacity:0;transform:translateY(14px);transition:background .15s,box-shadow .15s}
-    .hero-cta:hover{background:var(--orange-light);box-shadow:0 8px 24px rgba(212,104,26,.4)}
+    /* CTA orange uses a slightly darker shade so white text passes WCAG AA (4.5:1). */
+    .hero-cta{display:inline-flex;align-items:center;gap:10px;margin-top:24px;min-height:48px;padding:14px 28px;border-radius:var(--r);background:#ae5215;color:#fff;font-size:16px;font-weight:700;text-decoration:none;border:none;box-shadow:0 4px 16px rgba(174,82,21,.3);opacity:0;transform:translateY(14px);transition:background .15s,box-shadow .15s}
+    .hero-cta:hover{background:#c25e1a;box-shadow:0 8px 24px rgba(174,82,21,.4)}
     .hero-cta svg{width:16px;height:16px}
-    .scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:2;opacity:0;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text-cream-dim);font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+    .hero-video-toggle{position:absolute;top:18px;right:18px;z-index:3;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:11px 16px;border-radius:24px;background:rgba(17,24,39,.65);border:1px solid rgba(255,255,255,.18);color:#fff;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;backdrop-filter:blur(8px);transition:background .2s,border-color .2s}
+    .hero-video-toggle:hover{background:rgba(17,24,39,.85);border-color:rgba(255,255,255,.4)}
+    .hero-video-toggle svg{flex-shrink:0}
+    .scroll-hint{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:2;opacity:0;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--text-cream-dim);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
     .scroll-pill{width:18px;height:28px;border-radius:9px;border:1.5px solid rgba(255,255,255,.15);position:relative}
     .scroll-pill::after{content:"";position:absolute;top:5px;left:50%;transform:translateX(-50%);width:2.5px;height:5px;border-radius:2px;background:var(--orange);animation:sd 1.8s ease-in-out infinite}
     @keyframes sd{0%,100%{opacity:1;transform:translateX(-50%) translateY(0)}50%{opacity:.2;transform:translateX(-50%) translateY(8px)}}
@@ -83,12 +125,14 @@
     /* CAPTURE */
     .capture{max-width:680px;margin:32px auto 0;padding:0 24px}
     .capture-row{display:flex;gap:8px}
-    .capture-row input{flex:1;padding:14px 16px;border-radius:var(--r);border:1.5px solid var(--cream-dark);background:#fff;color:var(--text-dark);font-size:14px;font-family:var(--sans);outline:none;transition:border-color .2s;min-width:0}
-    .capture-row input::placeholder{color:var(--text-light)}
+    .capture-row input{flex:1;min-height:48px;padding:14px 16px;border-radius:var(--r);border:1.5px solid var(--cream-dark);background:#fff;color:var(--text-dark);font-size:16px;font-family:var(--sans);transition:border-color .2s;min-width:0}
+    .capture-row input::placeholder{color:var(--text-mid)}
     .capture-row input:focus{border-color:var(--orange)}
-    .capture-row button{padding:14px 24px;border-radius:var(--r);border:none;background:var(--orange);color:#fff;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;white-space:nowrap;transition:background .15s}
-    .capture-row button:hover{background:var(--orange-light)}
-    .capture-fine{font-size:11px;color:var(--text-light);margin-top:6px}
+    .capture-row button{min-height:48px;padding:14px 24px;border-radius:var(--r);border:none;background:#ae5215;color:#fff;font-size:16px;font-weight:700;font-family:var(--sans);cursor:pointer;white-space:nowrap;transition:background .15s}
+    .capture-row button:hover{background:#c25e1a}
+    .capture-fine{font-size:14px;line-height:1.45;color:var(--text-mid);margin-top:8px}
+    .capture-err{font-size:14px;line-height:1.45;color:#c53030;font-weight:600;margin-top:8px}
+    .capture-err:empty{display:none}
     .capture-fine a{color:var(--text-mid);text-decoration:underline;text-decoration-color:rgba(74,85,104,.3);text-underline-offset:2px}
     .capture-fine a:hover{color:var(--orange);text-decoration-color:var(--orange)}
     .capture-ok{display:none;padding:14px;border-radius:var(--r);background:rgba(120,162,47,.1);border:1px solid rgba(120,162,47,.2);color:#3d7a1c;font-size:14px;font-weight:700}
@@ -114,28 +158,34 @@
     .dlg-header{padding:22px 24px 18px;border-bottom:1px solid rgba(0,0,0,.06);display:flex;gap:14px;align-items:center}
     .dlg-avatar{flex:0 0 52px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--orange) 0%,var(--orange-light) 100%);color:#fff;display:grid;place-items:center;font-family:var(--heading);font-weight:700;font-size:18px;letter-spacing:-.02em;box-shadow:0 4px 12px rgba(212,104,26,.25)}
     .dlg-info{flex:1;min-width:0}
-    .dlg-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-light);margin-bottom:2px}
+    .dlg-eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-mid);margin-bottom:2px}
     .dlg-name{font-family:var(--heading);font-weight:700;font-size:18px;letter-spacing:-.01em;color:var(--text-dark);line-height:1.2;margin-bottom:2px}
-    .dlg-role{font-size:13px;color:var(--text-mid);margin-bottom:4px}
-    .dlg-mail{font-size:12px;color:var(--orange);text-decoration:none;font-weight:600;word-break:break-all}
+    .dlg-role{font-size:14px;color:var(--text-mid);margin-bottom:4px}
+    .dlg-mail{font-size:14px;color:#ae5215;text-decoration:underline;font-weight:600;word-break:break-all}
     .dlg-mail:hover{text-decoration:underline}
     .dlg-body{padding:22px 24px 22px}
     .dlg-title{font-family:var(--heading);font-weight:700;font-size:22px;letter-spacing:-.01em;color:var(--text-dark);margin-bottom:16px}
     .dlg-form{display:grid;gap:14px}
-    .dlg-row label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-mid);margin-bottom:5px}
-    .dlg-row input{display:block;width:100%;padding:12px 14px;font-size:15px;font-family:var(--sans);border:1.5px solid var(--cream-dark);border-radius:var(--r);background:#fff;color:var(--text-dark);outline:none;transition:border-color .2s}
+    .dlg-row label{display:block;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-mid);margin-bottom:6px}
+    .dlg-row .req,.req{color:#c53030;margin-left:2px;font-weight:700}
+    .dlg-required-note{font-size:13px;color:var(--text-mid);margin:-4px 0 4px}
+    .dlg-row input{display:block;width:100%;min-height:48px;padding:12px 14px;font-size:16px;font-family:var(--sans);border:1.5px solid var(--cream-dark);border-radius:var(--r);background:#fff;color:var(--text-dark);transition:border-color .2s}
     .dlg-row input:focus{border-color:var(--orange)}
-    .dlg-submit{margin-top:4px;padding:15px 20px;font-size:15px;font-weight:700;font-family:var(--sans);border:none;border-radius:var(--r);background:var(--orange);color:#fff;cursor:pointer;transition:background .15s;box-shadow:0 4px 16px rgba(212,104,26,.3)}
-    .dlg-submit:hover{background:var(--orange-light)}
+    .dlg-row input[aria-invalid="true"]{border-color:#c53030}
+    .dlg-row .err{display:block;margin-top:4px;font-size:13px;color:#c53030;font-weight:600}
+    .dlg-submit{margin-top:4px;min-height:48px;padding:15px 20px;font-size:16px;font-weight:700;font-family:var(--sans);border:none;border-radius:var(--r);background:#ae5215;color:#fff;cursor:pointer;transition:background .15s;box-shadow:0 4px 16px rgba(174,82,21,.3)}
+    .dlg-submit:hover{background:#c25e1a}
     .dlg-submit:disabled{opacity:.6;cursor:wait}
-    .dlg-fine{font-size:11px;color:var(--text-light);margin-top:14px}
-    .dlg-fine a{color:var(--text-mid);text-decoration:underline;text-decoration-color:rgba(74,85,104,.3);text-underline-offset:2px}
+    .dlg-fine{font-size:13px;line-height:1.45;color:var(--text-mid);margin-top:14px}
+    .dlg-err{font-size:14px;line-height:1.45;color:#c53030;font-weight:600;margin-top:10px}
+    .dlg-err:empty{display:none}
+    .dlg-fine a{color:var(--text-mid);text-decoration:underline;text-decoration-color:rgba(74,85,104,.6);text-underline-offset:2px}
     .dlg-fine a:hover{color:var(--orange);text-decoration-color:var(--orange)}
-    .dlg-ok{display:none;padding:16px;border-radius:var(--r);background:rgba(120,162,47,.1);border:1px solid rgba(120,162,47,.2);color:#3d7a1c;font-size:14px;font-weight:600;line-height:1.4}
-    .dlg-linkedin{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 16px;font-size:13px;font-weight:600;font-family:var(--sans);background:#fff;color:var(--text-dark);border:1.5px solid var(--cream-dark);border-radius:var(--r);cursor:pointer;margin-bottom:14px;transition:all .15s}
+    .dlg-ok{display:none;padding:16px;border-radius:var(--r);background:rgba(61,122,28,.08);border:1px solid rgba(61,122,28,.25);color:#2d5814;font-size:15px;font-weight:600;line-height:1.4}
+    .dlg-linkedin{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;padding:12px 16px;font-size:14px;font-weight:600;font-family:var(--sans);background:#fff;color:var(--text-dark);border:1.5px solid var(--cream-dark);border-radius:var(--r);cursor:pointer;margin-bottom:14px;transition:all .15s}
     .dlg-linkedin:hover{border-color:#0a66c2;color:#0a66c2;background:rgba(10,102,194,.04)}
     .dlg-linkedin svg{width:16px;height:16px;flex:0 0 16px}
-    .dlg-divider{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+    .dlg-divider{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:12px;color:var(--text-mid);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
     .dlg-divider::before,.dlg-divider::after{content:"";flex:1;height:1px;background:rgba(0,0,0,.08)}
     @keyframes dlgFade{from{opacity:0}to{opacity:1}}
     @keyframes dlgUp{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -145,40 +195,40 @@
     .stats-section{background:var(--cream);padding:48px 24px 64px}
     .stats-grid{max-width:680px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--cream-dark);border-radius:var(--r);overflow:hidden}
     .sg{background:#fff;padding:24px 14px;text-align:center}
-    .sg-num{font-family:var(--heading);font-size:clamp(20px,3vw,28px);font-weight:900;color:var(--orange);letter-spacing:-.02em}
-    .sg-label{font-size:10px;color:var(--text-light);margin-top:4px;line-height:1.3;font-weight:500}
+    .sg-num{font-family:var(--heading);font-size:clamp(22px,3vw,28px);font-weight:900;color:var(--orange);letter-spacing:-.02em}
+    .sg-label{font-size:12px;color:var(--text-mid);margin-top:6px;line-height:1.3;font-weight:500}
     @media(max-width:520px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
 
     /* ===== PROJECTS (dark section) ===== */
     .projects-section{background:var(--navy);color:var(--cream);padding:64px 24px 72px;position:relative}
     .projects-section::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:var(--orange)}
     .wrap{max-width:680px;margin:0 auto}
-    .tag{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
-    .tag--light{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:var(--text-cream-dim)}
-    .tag--dark{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.06);color:var(--text-light)}
-    .tag-dot{width:5px;height:5px;border-radius:50%;background:var(--orange)}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+    .tag--light{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(245,240,235,.85)}
+    .tag--dark{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.08);color:var(--text-mid)}
+    .tag-dot{width:6px;height:6px;border-radius:50%;background:var(--orange)}
     .s-title{font-family:var(--heading);font-size:clamp(26px,4.5vw,36px);font-weight:900;letter-spacing:-.02em;line-height:1.1}
-    .s-desc{font-size:15px;color:var(--text-cream-dim);line-height:1.6;margin-top:6px}
+    .s-desc{font-size:16px;color:rgba(245,240,235,.85);line-height:1.6;margin-top:8px}
 
     .img-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
     .img-card{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/3.2;cursor:pointer;text-decoration:none;color:#fff;display:block}
     .img-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.16,1,.3,1)}.img-card:hover img{transform:scale(1.04)}
     .img-card-ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.82) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:16px}
-    .img-badge{display:inline-flex;align-self:flex-start;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin-bottom:5px;background:var(--orange)}
-    .img-card-title{font-family:var(--heading);font-size:17px;font-weight:800;line-height:1.15}
-    .img-card-sub{font-size:12px;opacity:.7;margin-top:2px}
-    .img-card-stat{display:inline-flex;margin-top:6px;padding:4px 10px;border-radius:6px;background:rgba(255,255,255,.12);backdrop-filter:blur(6px);font-family:var(--mono);font-size:12px;font-weight:700;color:#fff}
+    .img-badge{display:inline-flex;align-self:flex-start;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px;background:var(--orange);color:#fff}
+    .img-card-title{font-family:var(--heading);font-size:18px;font-weight:800;line-height:1.15}
+    .img-card-sub{font-size:13px;opacity:.85;margin-top:3px}
+    .img-card-stat{display:inline-flex;margin-top:8px;padding:5px 10px;border-radius:6px;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);font-family:var(--mono);font-size:13px;font-weight:700;color:#fff}
     @media(max-width:520px){.img-grid{grid-template-columns:1fr}}
 
     .pipeline{margin-top:16px;padding:18px;border-radius:var(--r);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);text-align:center}
-    .pipeline-label{font-size:11px;color:var(--text-cream-dim);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+    .pipeline-label{font-size:12px;color:rgba(245,240,235,.85);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
     .pipeline-num{font-family:var(--heading);font-size:clamp(28px,5vw,40px);font-weight:900;color:var(--orange-light)}
 
     .cards{display:flex;flex-direction:column;gap:8px;margin-top:14px}
     .card{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.03);border-radius:var(--r);padding:14px 16px;text-decoration:none;color:var(--cream);border:1px solid rgba(255,255,255,.06);transition:all .2s;cursor:pointer}
     .card:hover{border-color:rgba(255,255,255,.12);transform:translateX(3px);background:rgba(255,255,255,.05)}
     .card-ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;background:rgba(255,255,255,.06)}.card-ic svg{width:18px;height:18px;color:var(--orange-light)}
-    .card-body{flex:1;min-width:0}.card-t{font-size:14px;font-weight:700;margin-bottom:1px}.card-d{font-size:12px;color:var(--text-cream-dim);line-height:1.4}
+    .card-body{flex:1;min-width:0}.card-t{font-size:15px;font-weight:700;margin-bottom:2px}.card-d{font-size:13px;color:rgba(245,240,235,.8);line-height:1.45}
     .card-go{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);display:grid;place-items:center;transition:all .2s}
     .card-go svg{width:13px;height:13px;color:var(--text-cream-dim);transition:color .2s}
     .card:hover .card-go{background:var(--orange);border-color:var(--orange)}.card:hover .card-go svg{color:#fff}
@@ -201,14 +251,14 @@
     .news-section{background:var(--cream);padding:0 24px 48px}
     .news-wrap{max-width:680px;margin:0 auto}
     .news-grid{display:flex;flex-direction:column;gap:6px;margin-top:14px}
-    .news-item{display:flex;align-items:center;gap:12px;background:#fff;border-radius:var(--r);padding:12px 14px;border:1px solid var(--cream-dark);text-decoration:none;color:var(--text-dark);transition:all .2s}
+    .news-item{display:flex;align-items:center;gap:12px;min-height:48px;background:#fff;border-radius:var(--r);padding:12px 14px;border:1px solid var(--cream-dark);text-decoration:none;color:var(--text-dark);transition:all .2s}
     .news-item:hover{border-color:var(--orange);transform:translateX(3px)}
-    .news-date{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--orange);white-space:nowrap;flex-shrink:0;width:44px;text-align:center}
-    .news-title{font-size:13px;font-weight:600;line-height:1.3;flex:1;color:var(--text-dark)}.news-arrow{color:var(--text-light);font-size:13px;flex-shrink:0}
+    .news-date{font-family:var(--mono);font-size:12px;font-weight:700;color:#ae5215;white-space:nowrap;flex-shrink:0;width:48px;text-align:center}
+    .news-title{font-size:14px;font-weight:600;line-height:1.4;flex:1;color:var(--text-dark)}.news-arrow{color:var(--text-mid);font-size:16px;flex-shrink:0;font-weight:700}
     .action-bar{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
-    .action-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:var(--r);background:#fff;border:1px solid var(--cream-dark);color:var(--text-dark);font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;text-decoration:none;transition:all .2s}
+    .action-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 16px;border-radius:var(--r);background:#fff;border:1px solid var(--cream-dark);color:var(--text-dark);font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;text-decoration:none;transition:all .2s}
     .action-btn:hover{border-color:var(--orange);color:var(--orange)}
-    .action-btn svg{width:15px;height:15px;color:var(--orange)}
+    .action-btn svg{width:16px;height:16px;color:var(--orange)}
 
     /* ===== BUSINESS CARD (dark) ===== */
     .biz-section{background:var(--navy);padding:64px 24px;position:relative}
@@ -242,27 +292,28 @@
     .biz-spacer{display:none}
     .biz-info{margin-top:auto}
     .biz-title{font-family:var(--heading);font-size:15px;font-weight:700;margin-bottom:1px}
-    .biz-org{font-size:10px;color:var(--text-light);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
-    .biz-details{display:flex;flex-direction:column;gap:5px}
-    .biz-row{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-mid);text-decoration:none;font-weight:500;transition:color .15s}
+    .biz-org{font-size:12px;color:var(--text-mid);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+    .biz-details{display:flex;flex-direction:column;gap:7px}
+    .biz-row{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-mid);text-decoration:none;font-weight:500;transition:color .15s}
     .biz-row:hover{color:var(--orange)}.biz-row svg{color:var(--text-light);flex-shrink:0}
     .biz-save{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:16px;padding:14px;border:none;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--cream);font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;transition:all .2s;border-radius:var(--r)}
     .biz-save:hover{background:var(--orange);border-color:var(--orange)}
 
     /* FOOTER */
-    .footer{background:var(--navy-deep);text-align:center;padding:40px 24px 32px;font-size:12px;color:var(--text-cream-dim)}
+    .footer{background:var(--navy-deep);text-align:center;padding:40px 24px 32px;font-size:14px;color:rgba(245,240,235,.85)}
     .footer-logos{display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:18px;flex-wrap:wrap}
-    .footer-logos img{height:24px;opacity:.4;filter:brightness(0) invert(1);transition:opacity .2s}.footer-logos img:hover{opacity:.7}
-    .footer a{color:var(--orange-light);text-decoration:none}
-    .footer-tag{font-family:var(--heading);font-weight:700;font-size:14px;letter-spacing:-.01em;color:var(--text-cream);margin-bottom:22px}
+    .footer-logos img{height:28px;opacity:.6;filter:brightness(0) invert(1);transition:opacity .2s}.footer-logos img:hover{opacity:1}
+    .footer a{color:var(--orange-light);text-decoration:underline;text-underline-offset:2px}
+    .footer-tag{font-family:var(--heading);font-weight:700;font-size:15px;letter-spacing:-.01em;color:var(--text-cream);margin-bottom:22px}
     .footer-social{display:flex;gap:12px;justify-content:center;margin-bottom:22px}
-    .footer-social a{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.12);color:var(--text-cream-dim);transition:color .2s,border-color .2s}
-    .footer-social a:hover{color:var(--orange-light);border-color:var(--orange-light)}
-    .footer-social svg{width:14px;height:14px}
-    .footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;font-size:12px}
-    .footer-links a{color:var(--text-cream-dim)}
+    .footer-social a{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.18);color:rgba(245,240,235,.85);transition:color .2s,border-color .2s,background .2s;text-decoration:none}
+    .footer-social a:hover{color:#fff;border-color:var(--orange-light);background:rgba(212,104,26,.15)}
+    .footer-social svg{width:16px;height:16px}
+    .footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;font-size:14px}
+    .footer-links a{color:rgba(245,240,235,.85);text-decoration:underline;text-underline-offset:2px}
     .footer-links a:hover{color:var(--orange-light)}
-    .footer-copy{font-size:11px;color:var(--text-cream-dim);margin-top:4px}
+    .footer-copy{font-size:13px;color:rgba(245,240,235,.85);margin-top:8px}
+    .footer-copy a{color:var(--cream);text-decoration:underline;text-underline-offset:2px}
 
     /* GSAP */
     .rv-up{opacity:0;transform:translateY(24px)}.rv-scale{opacity:0;transform:scale(.97)}.rv-left{opacity:0;transform:translateX(-14px)}
@@ -270,22 +321,24 @@
 </head>
 <body>
 
-  <div id="progressBar"></div>
-  <button id="btt" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div id="progressBar" aria-hidden="true"></div>
+  <button id="btt" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 
   <!-- LOADER -->
   <div class="loader" id="loader"><img class="loader-logo" id="loaderLogo" src="https://businesskirklees.com/wp-content/uploads/2022/07/Business-Kirklees-icon-white.png" alt=""></div>
 
   <!-- DELEGATE SPLASH — fullscreen takeover when ?d=<code> matches a known delegate -->
-  <div class="delegate-splash" id="delegateSplash" hidden>
-    <div class="delegate-splash-glow"></div>
-    <div class="delegate-splash-glow-2"></div>
+  <section class="delegate-splash" id="delegateSplash" aria-labelledby="delegateSplashHeading" hidden>
+    <div class="delegate-splash-glow" aria-hidden="true"></div>
+    <div class="delegate-splash-glow-2" aria-hidden="true"></div>
     <div class="delegate-splash-content">
-      <h1 class="delegate-splash-h">Let's<br><em>connect.</em></h1>
+      <h1 class="delegate-splash-h" id="delegateSplashHeading">Let's<br><em>connect.</em></h1>
       <p class="delegate-splash-sub">£3.5bn of regeneration.<br>Sites, schemes, and the team to talk to.</p>
     </div>
-  </div>
+  </section>
 
   <!-- DELEGATE MODAL -->
   <div class="dlg-modal" id="dlgModal" hidden>
@@ -302,27 +355,43 @@
         </div>
       </div>
       <div class="dlg-body">
-        <h3 class="dlg-title" id="dlgTitle">Get your investment pack</h3>
+        <h2 class="dlg-title" id="dlgTitle">Get your investment pack</h2>
         <button type="button" class="dlg-linkedin" id="dlgLinkedIn">
-          <svg viewBox="0 0 24 24" fill="#0a66c2" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#0a66c2" aria-hidden="true" focusable="false"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
           Sign in with LinkedIn
         </button>
-        <div class="dlg-divider">or</div>
-        <form id="dlgForm" class="dlg-form" autocomplete="on">
-          <div class="dlg-row"><label for="dlgInName">Name</label><input id="dlgInName" name="name" type="text" required autocomplete="name"></div>
-          <div class="dlg-row"><label for="dlgInCompany">Company</label><input id="dlgInCompany" name="company" type="text" required autocomplete="organization"></div>
-          <div class="dlg-row"><label for="dlgInEmail">Email</label><input id="dlgInEmail" name="email" type="email" required autocomplete="email"></div>
+        <div class="dlg-divider" aria-hidden="true">or</div>
+        <form id="dlgForm" class="dlg-form" autocomplete="on" novalidate>
+          <div class="dlg-row">
+            <label for="dlgInName">Name <span class="req" aria-hidden="true">*</span></label>
+            <input id="dlgInName" name="name" type="text" required aria-required="true" autocomplete="name">
+          </div>
+          <div class="dlg-row">
+            <label for="dlgInCompany">Company <span class="req" aria-hidden="true">*</span></label>
+            <input id="dlgInCompany" name="company" type="text" required aria-required="true" autocomplete="organization">
+          </div>
+          <div class="dlg-row">
+            <label for="dlgInEmail">Email <span class="req" aria-hidden="true">*</span></label>
+            <input id="dlgInEmail" name="email" type="email" required aria-required="true" autocomplete="email" inputmode="email" aria-describedby="dlgFine">
+          </div>
+          <p class="dlg-required-note">Fields marked <span class="req" aria-hidden="true">*</span> are required.</p>
           <button type="submit" class="dlg-submit">Get my pack</button>
         </form>
-        <div class="dlg-fine" id="dlgFine">We'll send you our investment pack and add you to our contact list. <a href="https://www.kirklees.gov.uk/beta/information-and-data/pdf/privacy-notice-business-investment-team.pdf" target="_blank" rel="noopener">Privacy notice</a>.</div>
-        <div class="dlg-ok" id="dlgOk"></div>
+        <div class="dlg-fine" id="dlgFine">We'll send you our investment pack and add you to our contact list. <a href="https://www.kirklees.gov.uk/beta/information-and-data/pdf/privacy-notice-business-investment-team.pdf" target="_blank" rel="noopener">Privacy notice (opens in new tab)</a>.</div>
+        <div class="dlg-err" id="dlgErr" role="alert"></div>
+        <div class="dlg-ok" id="dlgOk" role="status" aria-live="polite"></div>
       </div>
     </div>
   </div>
 
   <!-- HERO -->
   <header class="hero">
-    <div class="hero-vid"><video id="heroVideo" muted loop playsinline poster="https://businesskirklees.com/wp-content/uploads/2026/03/22054_213_Aerial_Night-scaled.jpg"><source src="https://businesskirklees.com/wp-content/uploads/2024/09/kirklees_v9_nographics-Original-1-1.mp4" type="video/mp4"></video><div class="hero-dim"></div></div>
+    <div class="hero-vid" aria-hidden="true"><video id="heroVideo" muted loop playsinline aria-hidden="true" tabindex="-1" poster="https://businesskirklees.com/wp-content/uploads/2026/03/22054_213_Aerial_Night-scaled.jpg"><source src="https://businesskirklees.com/wp-content/uploads/2024/09/kirklees_v9_nographics-Original-1-1.mp4" type="video/mp4"></video><div class="hero-dim"></div></div>
+    <button class="hero-video-toggle" id="heroVideoToggle" type="button" aria-pressed="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14" aria-hidden="true" data-icon="pause"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true" data-icon="play" style="display:none"><polygon points="6,4 20,12 6,20"/></svg>
+      <span class="hero-video-toggle-label">Pause video</span>
+    </button>
     <div class="hero-c">
       <div class="hero-badge"><img src="ukreiif-white.png" alt="UKREiiF" style="height:16px;width:auto"> 2026</div>
       <img class="hero-logo" src="https://businesskirklees.com/wp-content/uploads/2022/07/Business-Kirklees-icon-white.png" alt="Business Kirklees">
@@ -333,8 +402,11 @@
     <div class="scroll-hint" id="scrollHint"><span>Scroll</span><div class="scroll-pill"></div></div>
   </header>
 
+  <main id="main">
+
   <!-- PITCH -->
-  <section class="pitch" id="pitch">
+  <section class="pitch" id="pitch" aria-labelledby="pitchHeading">
+    <h2 id="pitchHeading" class="sr-only">Why invest in Kirklees</h2>
     <div class="pitch-inner">
       <div class="pitch-left rv-up">
         <div class="pitch-num" id="pitchNum">&pound;0bn</div>
@@ -345,17 +417,20 @@
       </div>
     </div>
     <div class="capture rv-up">
-      <form class="capture-row" id="captureForm">
-        <input type="email" placeholder="Your email" required>
+      <form class="capture-row" id="captureForm" novalidate aria-describedby="captureFine">
+        <label class="sr-only" for="captureEmail">Your email address</label>
+        <input id="captureEmail" name="email" type="email" placeholder="Your email" required aria-required="true" autocomplete="email">
         <button type="submit">Get investment pack</button>
       </form>
-      <div class="capture-fine">We'll send you our investment pack and add you to our contact list. <a href="https://www.kirklees.gov.uk/beta/information-and-data/pdf/privacy-notice-business-investment-team.pdf" target="_blank" rel="noopener">Privacy notice</a>.</div>
-      <div class="capture-ok" id="captureOk"></div>
+      <div class="capture-fine" id="captureFine">We'll send you our investment pack and add you to our contact list. <a href="https://www.kirklees.gov.uk/beta/information-and-data/pdf/privacy-notice-business-investment-team.pdf" target="_blank" rel="noopener">Privacy notice (opens in new tab)</a>.</div>
+      <div class="capture-err" id="captureErr" role="alert"></div>
+      <div class="capture-ok" id="captureOk" role="status" aria-live="polite"></div>
     </div>
   </section>
 
   <!-- STATS -->
-  <section class="stats-section">
+  <section class="stats-section" aria-labelledby="statsHeading">
+    <h2 id="statsHeading" class="sr-only">Key statistics</h2>
     <div class="stats-grid rv-scale">
       <div class="sg"><div class="sg-num">15k</div><div class="sg-label">Businesses</div></div>
       <div class="sg"><div class="sg-num">40k</div><div class="sg-label">Graduates / yr</div></div>
@@ -433,8 +508,8 @@
   <section class="biz-section">
     <div class="biz-wrap">
       <h2 class="biz-section-title rv-up">Get in touch</h2>
-      <a class="biz-card rv-scale" href="https://businesskirklees.com/#contactUs" target="_blank" style="text-decoration:none;color:inherit;display:block">
-        <div class="biz-inner" style="cursor:pointer">
+      <div class="biz-card rv-scale">
+        <div class="biz-inner">
           <div class="biz-body">
             <img class="biz-logo" src="https://businesskirklees.com/wp-content/uploads/2022/12/Business-Kirklees-main-icon.png" alt="Business Kirklees">
             <div class="biz-spacer"></div>
@@ -442,17 +517,19 @@
             <div class="biz-title">Business &amp; Regeneration</div>
             <div class="biz-org">Kirklees Council</div>
             <div class="biz-details">
-              <a href="tel:01484221000" class="biz-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.11 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>01484 221000</a>
-              <a href="mailto:invest@kirklees.gov.uk" class="biz-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>invest@kirklees.gov.uk</a>
-              <a href="https://businesskirklees.com" class="biz-row" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>businesskirklees.com</a>
+              <a href="tel:01484221000" class="biz-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.11 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>01484 221000</a>
+              <a href="mailto:invest@kirklees.gov.uk" class="biz-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>invest@kirklees.gov.uk</a>
+              <a href="https://businesskirklees.com" class="biz-row" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>businesskirklees.com (opens in new tab)</a>
             </div>
             </div>
           </div>
         </div>
-      </a>
+      </div>
       <button class="biz-save" id="saveContact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>Save to contacts</button>
     </div>
   </section>
+
+  </main>
 
   <!-- FOOTER -->
   <footer class="footer">
@@ -491,21 +568,44 @@
     const DELEGATE_CODE=(new URLSearchParams(location.search).get("d")||"").toLowerCase().slice(0,8);
     const DELEGATE=DELEGATES[DELEGATE_CODE];
 
-    const lenis=new Lenis({duration:1.2,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
-    function raf(t){lenis.raf(t);requestAnimationFrame(raf)}requestAnimationFrame(raf);
-    lenis.on("scroll",ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
+    // A11y: every <svg> without explicit a11y semantics is decorative — hide from AT.
+    document.querySelectorAll("svg:not([aria-label]):not([role='img'])").forEach(svg=>{
+      if(!svg.hasAttribute("aria-hidden")){svg.setAttribute("aria-hidden","true");svg.setAttribute("focusable","false")}
+    });
+
+    // A11y: detect prefers-reduced-motion. When set, skip Lenis smooth scroll,
+    // freeze GSAP animations to their end state, and pause the hero video.
+    const REDUCED_MOTION=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let lenis=null;
+    if(!REDUCED_MOTION){
+      lenis=new Lenis({duration:1.2,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
+      function raf(t){lenis.raf(t);requestAnimationFrame(raf)}requestAnimationFrame(raf);
+      lenis.on("scroll",ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
+    }
 
     // LOADER + HERO
     const heroVideo=document.getElementById("heroVideo");
     const loaderEl=document.getElementById("loader");
-    // Logo fades in
-    setTimeout(()=>document.getElementById("loaderLogo").classList.add("in"),50);
-    // After 800ms, loader fades out with scale
-    setTimeout(()=>{
-      loaderEl.classList.add("out");
-      heroVideo.play().catch(()=>{});
-      setTimeout(()=>{loaderEl.classList.add("hide");runHero()},600);
-    },800);
+
+    if(REDUCED_MOTION){
+      // No loader, no hero animation — the page just appears.
+      loaderEl.classList.add("hide");
+      // Don't autoplay video for users who've asked for reduced motion.
+      heroVideo.pause();
+      const t=document.getElementById("heroVideoToggle");
+      t.setAttribute("aria-pressed","false");
+      t.querySelector("[data-icon='pause']").style.display="none";
+      t.querySelector("[data-icon='play']").style.display="";
+      t.querySelector(".hero-video-toggle-label").textContent="Play video";
+    }else{
+      setTimeout(()=>document.getElementById("loaderLogo").classList.add("in"),50);
+      setTimeout(()=>{
+        loaderEl.classList.add("out");
+        heroVideo.play().catch(()=>{});
+        setTimeout(()=>{loaderEl.classList.add("hide");runHero()},600);
+      },800);
+    }
 
     // HERO
     function runHero(){
@@ -517,8 +617,29 @@
         .to(".hero-cta",{opacity:1,y:0,duration:.6},.95)
         .to("#scrollHint",{opacity:1,duration:.5},1.2)
     }
-    gsap.to(".hero-c",{y:-60,opacity:0,scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});
-    gsap.to(".hero-vid video",{scale:1.1,scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});
+    if(!REDUCED_MOTION){
+      gsap.to(".hero-c",{y:-60,opacity:0,scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});
+      gsap.to(".hero-vid video",{scale:1.1,scrollTrigger:{trigger:".hero",start:"top top",end:"bottom top",scrub:true}});
+    }
+
+    // Hero video play/pause toggle
+    document.getElementById("heroVideoToggle").addEventListener("click",function(){
+      const playing=!heroVideo.paused;
+      const pauseIcon=this.querySelector("[data-icon='pause']");
+      const playIcon=this.querySelector("[data-icon='play']");
+      const label=this.querySelector(".hero-video-toggle-label");
+      if(playing){
+        heroVideo.pause();
+        this.setAttribute("aria-pressed","false");
+        pauseIcon.style.display="none";playIcon.style.display="";
+        label.textContent="Play video";
+      }else{
+        heroVideo.play().catch(()=>{});
+        this.setAttribute("aria-pressed","true");
+        pauseIcon.style.display="";playIcon.style.display="none";
+        label.textContent="Pause video";
+      }
+    });
 
     // COUNTER
     ScrollTrigger.create({trigger:".pitch",start:"top 75%",once:true,onEnter:()=>{
@@ -543,28 +664,49 @@
       progressBar.style.width=pct+"%";
       if(window.scrollY>500){btt.style.opacity="1";btt.style.transform="translateY(0)"}else{btt.style.opacity="0";btt.style.transform="translateY(8px)"}
     });
-    btt.addEventListener("click",()=>lenis.scrollTo(0));
+    btt.addEventListener("click",()=>{
+      if(lenis)lenis.scrollTo(0);
+      else window.scrollTo({top:0,behavior:REDUCED_MOTION?"auto":"smooth"});
+    });
 
     // CAPTURE FORM — posts to Cloudflare Worker which forwards to Power Automate (Teams webhook)
     const CAPTURE_ENDPOINT = "https://business-kirklees-capture.maxyouell-work.workers.dev/";
     document.getElementById("captureForm").addEventListener("submit",async function(e){
       e.preventDefault();
-      const form=this,btn=form.querySelector("button"),input=form.querySelector("input"),fine=document.querySelector(".capture-fine");
-      const email=input.value.trim();if(!email)return;
+      const form=this,btn=form.querySelector("button"),input=form.querySelector("input");
+      const errEl=document.getElementById("captureErr");
+      const okEl=document.getElementById("captureOk");
+      errEl.textContent="";input.setAttribute("aria-invalid","false");
+
+      const email=input.value.trim();
+      // Basic client-side validation with visible + announced error
+      if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        input.setAttribute("aria-invalid","true");
+        errEl.textContent="Please enter a valid email address.";
+        input.focus();
+        return;
+      }
       btn.disabled=true;const orig=btn.textContent;btn.textContent="Sending…";
       try{
         const source=DELEGATE_CODE?`delegate-${DELEGATE_CODE}`:"ukreiif-landing";
         const res=await fetch(CAPTURE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,source})});
         if(!res.ok)throw new Error("send failed");
-        gsap.to(form,{opacity:0,y:-8,duration:.25,onComplete:()=>{
-          form.style.display="none";fine.style.display="none";
-          const ok=document.getElementById("captureOk");ok.style.display="block";ok.textContent="Check your inbox — we've sent you the investment pack.";gsap.from(ok,{opacity:0,y:8,duration:.35});
-          confetti({particleCount:80,spread:70,origin:{y:.6},colors:["#d4681a","#e8842f","#78a22f","#1a2234"]});
-          setTimeout(()=>confetti({particleCount:40,spread:100,origin:{y:.55},colors:["#d4681a","#e8842f"]}),200);
-        }});
+        const onDone=()=>{
+          form.style.display="none";
+          document.getElementById("captureFine").style.display="none";
+          okEl.style.display="block";
+          okEl.textContent="Thanks — check your inbox. We've sent you the investment pack.";
+          if(!REDUCED_MOTION){
+            confetti({particleCount:80,spread:70,origin:{y:.6},colors:["#d4681a","#e8842f","#78a22f","#1a2234"]});
+            setTimeout(()=>confetti({particleCount:40,spread:100,origin:{y:.55},colors:["#d4681a","#e8842f"]}),200);
+          }
+        };
+        if(REDUCED_MOTION){onDone()}
+        else{gsap.to(form,{opacity:0,y:-8,duration:.25,onComplete:onDone})}
       }catch(err){
-        btn.disabled=false;btn.textContent=orig;input.style.borderColor="#c53030";
-        fine.textContent="Something went wrong — please try again or email invest@kirklees.gov.uk";fine.style.color="#c53030";
+        btn.disabled=false;btn.textContent=orig;
+        input.setAttribute("aria-invalid","true");
+        errEl.textContent="Something went wrong — please try again or email invest@kirklees.gov.uk.";
       }
     });
 
@@ -595,8 +737,39 @@
       });
 
       const splash=document.getElementById("delegateSplash");
-      const showDlg=()=>{splash.hidden=false;dlg.hidden=false;setTimeout(()=>(inName.value?inCompany:inName).focus(),320)};
-      const hideDlg=()=>{dlg.hidden=true;splash.hidden=true};
+      // Focus trap: cycle Tab within the dialog while it's open.
+      const trapHandler=(e)=>{
+        if(e.key!=="Tab"||dlg.hidden)return;
+        const focusables=dlg.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),[tabindex]:not([tabindex="-1"])');
+        if(!focusables.length)return;
+        const first=focusables[0],last=focusables[focusables.length-1];
+        if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+        else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+      };
+      const showDlg=()=>{
+        splash.hidden=false;dlg.hidden=false;
+        // Make the rest of the document inert while the dialog is "modal".
+        const main=document.getElementById("main");
+        const footer=document.querySelector(".footer");
+        const btt=document.getElementById("btt");
+        if(main)main.setAttribute("inert","");
+        if(footer)footer.setAttribute("inert","");
+        if(btt)btt.setAttribute("inert","");
+        document.addEventListener("keydown",trapHandler);
+        setTimeout(()=>(inName.value?inCompany:inName).focus(),320);
+      };
+      const hideDlg=()=>{
+        dlg.hidden=true;splash.hidden=true;
+        const main=document.getElementById("main");
+        const footer=document.querySelector(".footer");
+        const btt=document.getElementById("btt");
+        if(main)main.removeAttribute("inert");
+        if(footer)footer.removeAttribute("inert");
+        if(btt)btt.removeAttribute("inert");
+        document.removeEventListener("keydown",trapHandler);
+        // After dismissing, send focus to skip-link area so keyboard users land sensibly.
+        document.querySelector(".skip-link")?.focus();
+      };
       dlg.addEventListener("click",e=>{if(e.target.matches("[data-close]"))hideDlg()});
       document.addEventListener("keydown",e=>{if(!dlg.hidden&&e.key==="Escape")hideDlg()});
       // Show splash + sheet immediately — they're the primary content for delegate mode.
@@ -606,18 +779,39 @@
         e.preventDefault();
         const data=Object.fromEntries(new FormData(this));
         const btn=this.querySelector("button[type=submit]");
-        const fine=document.getElementById("dlgFine");
+        const errEl=document.getElementById("dlgErr");
+        const okEl=document.getElementById("dlgOk");
+        errEl.textContent="";
+
+        // Validate visible + announced. Mark each invalid field.
+        const fields={dlgInName:data.name?.trim(),dlgInCompany:data.company?.trim(),dlgInEmail:data.email?.trim()};
+        let firstInvalid=null;
+        for(const [id,val] of Object.entries(fields)){
+          const el=document.getElementById(id);
+          const valid=val&&(id!=="dlgInEmail"||/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val));
+          el.setAttribute("aria-invalid",valid?"false":"true");
+          if(!valid&&!firstInvalid)firstInvalid=el;
+        }
+        if(firstInvalid){
+          errEl.textContent=firstInvalid.id==="dlgInEmail"?"Please enter a valid email address.":"Please fill in all required fields.";
+          firstInvalid.focus();
+          return;
+        }
         btn.disabled=true;const orig=btn.textContent;btn.textContent="Sending…";
         try{
           const res=await fetch(CAPTURE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...data,source:`delegate-${DELEGATE_CODE}`})});
           if(!res.ok)throw new Error("send failed");
-          this.style.display="none";fine.style.display="none";
-          const ok=document.getElementById("dlgOk");ok.style.display="block";ok.textContent=`Thanks ${data.name.split(" ")[0]} — check your inbox for the investment pack.`;
-          confetti({particleCount:60,spread:70,origin:{y:.45},colors:["#d4681a","#e8842f","#78a22f","#1a2234"]});
+          this.style.display="none";
+          document.getElementById("dlgFine").style.display="none";
+          okEl.style.display="block";
+          okEl.textContent=`Thanks ${data.name.split(" ")[0]} — check your inbox for the investment pack.`;
+          if(!REDUCED_MOTION){
+            confetti({particleCount:60,spread:70,origin:{y:.45},colors:["#d4681a","#e8842f","#78a22f","#1a2234"]});
+          }
           setTimeout(hideDlg,3500);
         }catch(err){
           btn.disabled=false;btn.textContent=orig;
-          fine.textContent="Something went wrong — please try again or email invest@kirklees.gov.uk";fine.style.color="#c53030";
+          errEl.textContent="Something went wrong — please try again or email invest@kirklees.gov.uk.";
         }
       });
     }

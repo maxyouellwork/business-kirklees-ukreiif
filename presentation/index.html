@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Business Kirklees · UKREiiF 2026 · Team brief</title>
+<style>
+  @font-face{font-family:"VAG";src:url("../fonts/vag-bold.ttf");font-weight:700}
+  @font-face{font-family:"VAG";src:url("../fonts/vag-light.ttf");font-weight:300}
+  @font-face{font-family:"DIN";src:url("../fonts/din-regular.otf");font-weight:400}
+  @font-face{font-family:"DIN";src:url("../fonts/din-bold.otf");font-weight:700}
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#1a2234;
+    --navy-2:#243044;
+    --orange:#d4681a;
+    --orange-bright:#e8842f;
+    --cream:#f5f0eb;
+    --cream-2:#e5e0d8;
+    --teal:#0f7a8a;
+    --ink:#1a2234;
+    --muted:rgba(26,34,52,.6);
+  }
+
+  html,body{
+    font-family:"DIN",system-ui,-apple-system,sans-serif;
+    background:var(--cream-2);
+    color:var(--ink);
+    scroll-snap-type:y mandatory;
+    overflow-y:scroll;
+    height:100vh;
+  }
+
+  /* Each .slide is a viewport-sized stage. The actual content lives in a
+     fixed-size 1280x720 .canvas that gets scaled to fit. This keeps the
+     internal layout pixel-stable across screen sizes — we designed at 16:9. */
+  .slide{
+    height:100vh;
+    width:100vw;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .slide--cream,.slide--cream-deep,.slide--navy{}
+  .slide-bg{position:absolute;inset:0;z-index:-1}
+  .canvas{
+    width:1280px;
+    height:720px;
+    padding:48px 64px;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    flex:0 0 auto;
+    overflow:hidden;
+    transform-origin:center center;
+    transform: scale(min(calc(100vw / 1280), calc(100vh / 720)));
+  }
+
+  .slide--cream{background:var(--cream)}
+  .slide--navy{background:linear-gradient(165deg,var(--navy) 0%,var(--navy-2) 100%);color:var(--cream)}
+  .slide--cream-deep{background:var(--cream-2)}
+
+  /* Slide counter */
+  .slide-num{
+    position:absolute;
+    bottom:32px;right:48px;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.18em;
+    color:var(--muted);
+    opacity:.5;
+  }
+  .slide--navy .slide-num{color:rgba(245,240,235,.4)}
+
+  /* Slide brand mark */
+  .slide-mark{
+    position:absolute;
+    top:32px;left:48px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .slide--navy .slide-mark{color:rgba(245,240,235,.5)}
+  .slide-mark em{font-style:normal;color:var(--orange)}
+
+  /* Glows for navy slides */
+  .glow-tr{
+    position:absolute;top:-200px;right:-200px;
+    width:600px;height:600px;
+    background:radial-gradient(circle,rgba(212,104,26,.3) 0%,rgba(212,104,26,0) 65%);
+    pointer-events:none;
+  }
+  .glow-bl{
+    position:absolute;bottom:-250px;left:-250px;
+    width:700px;height:700px;
+    background:radial-gradient(circle,rgba(0,201,219,.12) 0%,rgba(0,201,219,0) 65%);
+    pointer-events:none;
+  }
+
+  /* ===== Slide 1: Title ===== */
+  .title-slide .canvas{justify-content:center}
+  .title-eyebrow{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:13px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--orange-bright);
+    margin-bottom:20px;
+  }
+  .title-head{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:88px;line-height:.92;letter-spacing:-.03em;
+    color:var(--cream);
+    max-width:18ch;
+    margin-bottom:24px;
+  }
+  .title-head em{font-style:normal;color:var(--orange-bright)}
+  .title-sub{
+    font-size:18px;line-height:1.45;
+    color:rgba(245,240,235,.78);
+    max-width:50ch;
+  }
+  .title-meta{
+    margin-top:36px;
+    display:flex;gap:40px;
+    font-size:11px;
+    color:rgba(245,240,235,.55);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .title-meta strong{
+    color:var(--cream);
+    display:block;
+    font-size:14px;
+    font-weight:700;
+    margin-top:5px;
+    letter-spacing:.02em;
+    text-transform:none;
+  }
+
+  /* ===== Section headers ===== */
+  .h-eyebrow{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:12px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--orange);
+    margin-bottom:14px;
+  }
+  .slide--navy .h-eyebrow{color:var(--orange-bright)}
+
+  .h-title{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:48px;line-height:.95;letter-spacing:-.02em;
+    margin-bottom:20px;
+  }
+  .h-title em{font-style:normal;color:var(--orange)}
+  .slide--navy .h-title em{color:var(--orange-bright)}
+
+  .h-sub{
+    font-size:17px;line-height:1.5;
+    color:var(--muted);
+    max-width:60ch;
+    margin-bottom:32px;
+  }
+  .slide--navy .h-sub{color:rgba(245,240,235,.72)}
+
+  /* Two-column layouts */
+  .two-col{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+    flex:1;
+    align-items:center;
+  }
+  .two-col--mockup{grid-template-columns:.9fr 1.1fr}
+  .two-col--mockup-right{grid-template-columns:1.1fr .9fr}
+
+  /* Mockup framing */
+  .mockup{
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    min-height:0;
+  }
+  .mockup img{
+    max-width:100%;
+    max-height:560px;
+    object-fit:contain;
+    filter:drop-shadow(0 30px 60px rgba(0,0,0,.25)) drop-shadow(0 4px 8px rgba(0,0,0,.08));
+  }
+
+  /* Feature lists */
+  .feat-list{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+  }
+  .feat-list li{
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
+    padding-bottom:24px;
+    border-bottom:1px solid rgba(26,34,52,.1);
+  }
+  .feat-list li:last-child{border-bottom:0}
+  .slide--navy .feat-list li{border-bottom-color:rgba(245,240,235,.12)}
+  .feat-num{
+    flex:0 0 36px;height:36px;
+    background:var(--orange);color:var(--cream);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:15px;
+    margin-top:2px;
+  }
+  .feat-body h4{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:20px;letter-spacing:-.01em;
+    margin-bottom:6px;
+    color:var(--ink);
+  }
+  .slide--navy .feat-body h4{color:var(--cream)}
+  .feat-body p{
+    font-size:15px;line-height:1.5;
+    color:var(--muted);
+    max-width:48ch;
+  }
+  .slide--navy .feat-body p{color:rgba(245,240,235,.7)}
+
+  /* Pipeline / flow steps */
+  .flow{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:32px;
+    align-items:stretch;
+    margin-top:32px;
+  }
+  .flow-step{
+    background:var(--cream);
+    border-radius:16px;
+    padding:28px 22px;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    border:1px solid rgba(26,34,52,.08);
+  }
+  .flow-step + .flow-step::before{
+    content:"→";
+    position:absolute;
+    left:-26px;top:50%;
+    transform:translateY(-50%);
+    font-size:22px;
+    color:var(--orange);
+    font-weight:700;
+  }
+  .flow-icon{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:42px;line-height:1;
+    color:var(--orange);
+    margin-bottom:18px;
+  }
+  .flow-step h4{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:18px;letter-spacing:-.01em;
+    margin-bottom:10px;
+    color:var(--ink);
+  }
+  .flow-step p{
+    font-size:13px;line-height:1.5;
+    color:var(--muted);
+  }
+  .flow-step small{
+    display:block;margin-top:14px;
+    font-size:10px;
+    color:var(--orange);
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+  }
+
+  /* Card grid (smart features) */
+  .smart-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    grid-template-rows:repeat(2,1fr);
+    gap:18px;
+    flex:1;
+    min-height:0;
+  }
+  .smart-card{
+    background:rgba(245,240,235,.06);
+    border:1px solid rgba(245,240,235,.12);
+    border-radius:16px;
+    padding:22px 26px;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+  }
+  .smart-card-head{
+    display:flex;gap:14px;align-items:center;
+    margin-bottom:10px;
+  }
+  .smart-card-pill{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--orange-bright);
+    padding:5px 10px;
+    background:rgba(212,104,26,.15);
+    border-radius:100px;
+  }
+  .smart-card h4{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:20px;letter-spacing:-.015em;
+    margin-bottom:8px;
+    color:var(--cream);
+  }
+  .smart-card p{
+    font-size:13px;line-height:1.5;
+    color:rgba(245,240,235,.72);
+    margin-bottom:12px;
+  }
+  .smart-card .example{
+    margin-top:auto;
+    background:rgba(0,0,0,.25);
+    border-radius:8px;
+    padding:10px 14px;
+    font-family:"DIN",monospace;
+    font-size:12px;
+    color:rgba(245,240,235,.82);
+    line-height:1.4;
+  }
+  .smart-card .example b{color:var(--orange-bright);font-weight:700}
+
+  /* Delegates list */
+  .delegate-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-top:18px;
+  }
+  .delegate{
+    background:var(--cream);
+    border-radius:12px;
+    padding:18px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    border:1px solid rgba(26,34,52,.08);
+  }
+  .delegate-name{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:17px;letter-spacing:-.01em;
+    color:var(--ink);
+  }
+  .delegate-role{
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.4;
+  }
+  .delegate-code{
+    margin-top:8px;
+    font-family:monospace;
+    font-size:11px;
+    color:var(--orange);
+    font-weight:700;
+  }
+
+  /* Quote / pull-out */
+  .pull{
+    background:var(--orange);
+    color:var(--cream);
+    border-radius:20px;
+    padding:32px 36px;
+    margin:24px 0;
+  }
+  .pull p{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:30px;line-height:1.15;letter-spacing:-.015em;
+  }
+
+  /* Stat tiles */
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-top:auto;
+    margin-bottom:0;
+  }
+  .stat{
+    background:rgba(245,240,235,.06);
+    border:1px solid rgba(245,240,235,.12);
+    border-radius:14px;
+    padding:20px 22px;
+  }
+  .stat-num{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:42px;line-height:1;letter-spacing:-.02em;
+    color:var(--orange-bright);
+    margin-bottom:6px;
+  }
+  .stat-label{
+    font-size:12px;
+    color:rgba(245,240,235,.7);
+    line-height:1.4;
+  }
+
+  /* Final URL slide */
+  .final-url{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:48px;letter-spacing:-.015em;
+    color:var(--orange);
+    margin:24px 0;
+  }
+  .final-list{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    font-size:18px;
+    color:rgba(245,240,235,.85);
+  }
+  .final-list li::before{
+    content:"✓";
+    color:var(--orange-bright);
+    margin-right:14px;
+    font-weight:700;
+  }
+
+  /* Mockup slide variant — full-bleed mockup right */
+  .showcase{
+    flex:1;
+    display:grid;
+    grid-template-columns:1fr 1.1fr;
+    gap:40px;
+    align-items:center;
+    min-height:0;
+  }
+  .showcase-text h2{
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:60px;line-height:.92;letter-spacing:-.025em;
+    margin-bottom:18px;
+  }
+  .showcase-text h2 em{font-style:normal;color:var(--orange)}
+  .slide--navy .showcase-text h2 em{color:var(--orange-bright)}
+  .showcase-text p{
+    font-size:16px;line-height:1.5;
+    color:var(--muted);
+    max-width:38ch;
+    margin-bottom:20px;
+  }
+  .slide--navy .showcase-text p{color:rgba(245,240,235,.78)}
+
+  .specs{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+    font-size:14px;
+    line-height:1.5;
+  }
+  .specs li{
+    display:flex;
+    gap:14px;
+    align-items:baseline;
+    color:var(--muted);
+  }
+  .slide--navy .specs li{color:rgba(245,240,235,.72)}
+  .specs strong{
+    flex:0 0 100px;
+    font-family:"VAG",sans-serif;font-weight:700;
+    font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--orange);
+  }
+
+  /* Nav hint */
+  .nav-hint{
+    position:fixed;
+    bottom:18px;left:50%;transform:translateX(-50%);
+    background:rgba(26,34,52,.9);
+    color:var(--cream);
+    padding:8px 16px;
+    border-radius:100px;
+    font-size:12px;
+    letter-spacing:.06em;
+    z-index:100;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+    transition:opacity .4s;
+  }
+  .nav-hint.hide{opacity:0;pointer-events:none}
+  .nav-hint kbd{
+    display:inline-block;
+    padding:2px 8px;margin:0 2px;
+    background:rgba(255,255,255,.15);
+    border-radius:4px;
+    font-family:inherit;
+    font-size:11px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===== 1. TITLE ===== -->
+  <section class="slide slide--navy title-slide">
+    <div class="canvas">
+    <div class="glow-tr"></div>
+    <div class="glow-bl"></div>
+    <div class="slide-mark">Business <em>Kirklees</em> · Team brief</div>
+    <div class="title-eyebrow">UKREiiF · Leeds · 19–21 May 2026</div>
+    <h1 class="title-head">Scan,<br>save,<br><em>connect.</em></h1>
+    <p class="title-sub">A lanyard that gets scanned, a page that captures the lead, and a pipeline that puts every conversation straight into the team's inbox.</p>
+    <div class="title-meta">
+      <div>What it is<strong>Two-piece capture system</strong></div>
+      <div>Live at<strong>businesskirklees.com</strong></div>
+      <div>Team<strong>8 delegates · Invest in Kirklees</strong></div>
+    </div>
+    <div class="slide-num">01 / 09</div>
+    </div>
+  </section>
+
+  <!-- ===== 2. THE PITCH ===== -->
+  <section class="slide slide--cream">
+    <div class="canvas">
+    <div class="slide-mark">The <em>idea</em></div>
+    <div style="margin-top:64px;flex:1;display:flex;flex-direction:column;justify-content:center">
+      <div class="h-eyebrow">In one sentence</div>
+      <h2 class="h-title" style="font-size:54px;max-width:20ch;margin-bottom:28px">Every handshake at UKREiiF turns into <em>a captured lead</em> — without anyone fishing for a business card.</h2>
+      <div class="pull" style="max-width:54ch;margin:0">
+        <p>"Nice to meet you — scan this and we'll send you the pack."</p>
+      </div>
+      <p style="font-size:15px;line-height:1.5;color:var(--muted);max-width:54ch;margin-top:20px">That single line is the whole interaction. The lanyard does the work, the lander does the form, the pipeline does the rest.</p>
+    </div>
+    <div class="slide-num">02 / 09</div>
+    </div>
+  </section>
+
+  <!-- ===== 3. THE LANYARD ===== -->
+  <section class="slide slide--cream-deep">
+    <div class="canvas">
+    <div class="slide-mark">Piece <em>one</em> · The lanyard</div>
+    <div class="showcase" style="margin-top:48px">
+      <div class="showcase-text">
+        <div class="h-eyebrow">Wear it · scan it · keep it</div>
+        <h2>The <em>scan-and-save</em> lanyard.</h2>
+        <p>Front shows who's wearing it. Back is one big QR code that opens a personalised landing page. No swapping cards, no typing emails into a phone.</p>
+        <ul class="specs">
+          <li><strong>Front</strong>Name, role, Business Kirklees / Kirklees Council marks</li>
+          <li><strong>Back</strong>"Let's connect." prompt + 50mm QR · cream stock</li>
+          <li><strong>Format</strong>70 × 100mm portrait · double-sided · print-ready</li>
+          <li><strong>Reusable</strong>Generic design — works at any future investment event</li>
+        </ul>
+      </div>
+      <div class="mockup">
+        <img src="lanyard-mockup.png" alt="Lanyard front and back mockup">
+      </div>
+    </div>
+    <div class="slide-num">03 / 09</div>
+    </div>
+  </section>
+
+  <!-- ===== 4. THE LANDER ===== -->
+  <section class="slide slide--cream">
+    <div class="canvas">
+    <div class="slide-mark">Piece <em>two</em> · The lander</div>
+    <div class="showcase" style="margin-top:48px;grid-template-columns:1.1fr 1fr">
+      <div class="mockup">
+        <img src="lander-mockup.png" alt="Lander on phone showing delegate splash">
+      </div>
+      <div class="showcase-text">
+        <div class="h-eyebrow">Personalised on scan</div>
+        <h2><em>"Let's connect."</em><br>Pre-warmed.</h2>
+        <p>When someone scans Jess's lanyard, they don't see a generic page — they see Jess. Her name, her role, her email, on a navy hero with a slide-up form. Three fields, one tap, done.</p>
+        <ul class="specs">
+          <li><strong>Hero</strong>"Let's connect." over £3.5bn regen line</li>
+          <li><strong>Form</strong>LinkedIn one-tap · or name / company / email</li>
+          <li><strong>Privacy</strong>GDPR notice with link to full statement</li>
+          <li><strong>Then</strong>Auto-reply with the investment brochure</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-num">04 / 09</div>
+    </div>
+  </section>
+
+  <!-- ===== 5. THE FLOW ===== -->
+  <section class="slide slide--cream-deep">
+    <div class="canvas">
+    <div class="slide-mark">How it <em>works</em> · End-to-end</div>
+    <div style="margin-top:48px">
+      <div class="h-eyebrow">From handshake to inbox in 30 seconds</div>
+      <h2 class="h-title" style="max-width:22ch">Five steps. The team only sees step five.</h2>
+    </div>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-icon">01</div>
+        <h4>Scan</h4>
+        <p>Delegate at UKREiiF points their phone camera at the QR on the back of someone's lanyard.</p>
+        <small>~3 seconds</small>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">02</div>
+        <h4>Splash</h4>
+        <p>Personalised "Let's connect." page opens, naming the team member who introduced them.</p>
+        <small>Per-delegate</small>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">03</div>
+        <h4>Submit</h4>
+        <p>Sign in with LinkedIn, or fill three fields. Privacy notice shown. Tap "Get my pack".</p>
+        <small>10 seconds</small>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">04</div>
+        <h4>Enrich</h4>
+        <p>Worker checks Companies House by email domain. Adds company name, number and city automatically.</p>
+        <small>Behind scenes</small>
+      </div>
+      <div class="flow-step">
+        <div class="flow-icon">05</div>
+        <h4>Land</h4>
+        <p>Lead lands in shared Excel + Teams chat. Auto-reply with brochure goes to the delegate.</p>
+        <small>Instant</small>
+      </div>
+    </div>
+    <div class="slide-num">05 / 09</div>
+    </div>
+  </section>
+
+  <!-- ===== 6. THE SMART STUFF ===== -->
+  <section class="slide slide--navy">
+    <div class="canvas">
+    <div class="glow-tr"></div>
+    <div class="slide-mark">The <em>not-obvious</em> bits</div>
+    <div style="margin-top:32px">
+      <div class="h-eyebrow">Where this beats a paper card</div>
+      <h2 class="h-title">Four things the lanyard knows that <em>a business card never could.</em></h2>
+    </div>
+    <div class="smart-grid" style="margin-top:32px">
+      <div class="smart-card">
+        <div class="smart-card-head"><span class="smart-card-pill">01 · Attribution</span></div>
+        <h4>Who introduced them</h4>
+        <p>Each lanyard's QR carries a delegate code. Every lead is tagged with whoever was wearing the badge they scanned.</p>
+        <div class="example">?d=<b>js</b> → "Introduced by Jess Newbould"</div>
+      </div>
+      <div class="smart-card">
+        <div class="smart-card-head"><span class="smart-card-pill">02 · Auto-fill</span></div>
+        <h4>Companies House lookup</h4>
+        <p>The Worker pulls the email domain, hits Companies House, and adds the matched company name, number and city to the lead row.</p>
+        <div class="example">@jll.com → <b>JLL Limited</b> · 01188567 · London</div>
+      </div>
+      <div class="smart-card">
+        <div class="smart-card-head"><span class="smart-card-pill">03 · One-tap</span></div>
+        <h4>Sign in with LinkedIn</h4>
+        <p>OIDC popup. Returns name and verified email — fills the form for them. Falls back to manual entry on any device.</p>
+        <div class="example">LinkedIn → name + email pre-filled · zero typing</div>
+      </div>
+      <div class="smart-card">
+        <div class="smart-card-head"><span class="smart-card-pill">04 · Compliant</span></div>
+        <h4>GDPR by default</h4>
+        <p>Privacy notice on the form. Lawful basis logged with each submission. Council privacy statement linked. Nothing dark-pattern.</p>
+        <div class="example">Consent + clear notice · linked council policy</div>
+      </div>
+    </div>
+    <div class="slide-num">06 / 09</div>
+    </div>
+  </section>
+
+  <!-- ===== 7. THE 8 DELEGATES ===== -->
+  <section class="slide slide--cream">
+    <div class="canvas">
+    <div class="slide-mark">The <em>team</em> · Per-delegate codes</div>
+    <div style="margin-top:48px">
+      <div class="h-eyebrow">Eight lanyards · eight unique QRs</div>
+      <h2 class="h-title" style="max-width:22ch">Every lead gets <em>tagged to the person</em> who introduced them.</h2>
+      <p class="h-sub">Each delegate has their own code on the QR. The lander reads it, shows their face on the splash, and writes their initials into the Excel "introduced by" column.</p>
+    </div>
+    <div class="delegate-grid">
+      <div class="delegate"><div class="delegate-name">Jess Newbould</div><div class="delegate-role">Inward Investment Project Officer</div><div class="delegate-code">?d=js</div></div>
+      <div class="delegate"><div class="delegate-name">James Barker</div><div class="delegate-role">Inward Investment Project Officer</div><div class="delegate-code">?d=jb</div></div>
+      <div class="delegate"><div class="delegate-name">Chris Duffill</div><div class="delegate-role">Head of Business, Economy &amp; Growth</div><div class="delegate-code">?d=cd</div></div>
+      <div class="delegate"><div class="delegate-name">Thomas Fish</div><div class="delegate-role">Head of Town Centre Programmes</div><div class="delegate-code">?d=tf</div></div>
+      <div class="delegate"><div class="delegate-name">Joanne Bartholomew</div><div class="delegate-role">Director of Development</div><div class="delegate-code">?d=jo</div></div>
+      <div class="delegate"><div class="delegate-name">David Shepherd</div><div class="delegate-role">Executive Director for Place</div><div class="delegate-code">?d=ds</div></div>
+      <div class="delegate"><div class="delegate-name">David Wildman</div><div class="delegate-role">Service Director · Regeneration &amp; Skills</div><div class="delegate-code">?d=dw</div></div>
+      <div class="delegate"><div class="delegate-name">Phil Jones</div><div class="delegate-role">Service Director · Homes &amp; Neighbourhoods</div><div class="delegate-code">?d=pj</div></div>
+    </div>
+    <div class="slide-num">07 / 09</div>
+    </div>
+  </section>
+
+  <!-- ===== 8. WHAT THE TEAM GETS ===== -->
+  <section class="slide slide--navy">
+    <div class="canvas">
+    <div class="glow-bl"></div>
+    <div class="slide-mark">For the <em>team</em></div>
+    <div style="margin-top:48px;max-width:60ch">
+      <div class="h-eyebrow">Where the leads land</div>
+      <h2 class="h-title">A shared Excel sheet and a <em>Teams chat</em>. That's it.</h2>
+      <p class="h-sub">No new tool to learn. The Worker forwards every submission into a Power Automate flow that writes a row to Excel Online and posts a card to the team chat. Auto-reply with the brochure goes back to the lead the same instant.</p>
+    </div>
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num">12</div>
+        <div class="stat-label">columns captured per lead — including time, source, IP, country, CH match</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">&lt;2s</div>
+        <div class="stat-label">end-to-end — submit to row in Excel + Teams ping</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">£0</div>
+        <div class="stat-label">running cost — Cloudflare free tier + Microsoft 365 already in use</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">8</div>
+        <div class="stat-label">delegates with their own attributable QR codes</div>
+      </div>
+    </div>
+    <div class="slide-num">08 / 09</div>
+    </div>
+  </section>
+
+  <!-- ===== 9. WHERE IT LIVES + NEXT ===== -->
+  <section class="slide slide--cream">
+    <div class="canvas">
+    <div class="slide-mark">Status · <em>What's next</em></div>
+    <div style="margin-top:48px">
+      <div class="h-eyebrow">Built · tested · live</div>
+      <h2 class="h-title" style="max-width:18ch">Ready for <em>UKREiiF.</em></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:32px;flex:1;min-height:0">
+      <div>
+        <h3 style="font-family:'VAG',sans-serif;font-weight:700;font-size:18px;color:var(--orange);text-transform:uppercase;letter-spacing:.16em;margin-bottom:18px">Where it lives</h3>
+        <ul class="specs" style="font-size:14px">
+          <li><strong>Lander</strong>businesskirklees.com / GitHub Pages</li>
+          <li><strong>Worker</strong>Cloudflare · capture + Companies House + LinkedIn</li>
+          <li><strong>Excel</strong>Power Automate → Excel Online (Business Kirklees site)</li>
+          <li><strong>Teams</strong>Auto-post into Investment chat</li>
+          <li><strong>Lanyards</strong>Print files ready · 70×100mm double-sided</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-family:'VAG',sans-serif;font-weight:700;font-size:18px;color:var(--orange);text-transform:uppercase;letter-spacing:.16em;margin-bottom:18px">Before 19 May</h3>
+        <ul class="specs" style="font-size:14px">
+          <li><strong>Print</strong>Send 8 lanyard PDFs to print supplier</li>
+          <li><strong>Brochure</strong>Confirm PDF link in auto-reply</li>
+          <li><strong>Mailbox</strong>Send-as access on invest@kirklees.gov.uk</li>
+          <li><strong>End-to-end</strong>One full test scan from each delegate's QR</li>
+          <li><strong>Brief</strong>10-min walkthrough with the 8 delegates</li>
+        </ul>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(26,34,52,.12);padding-top:18px;margin-top:auto">
+      <div class="h-eyebrow" style="margin-bottom:4px">Lead</div>
+      <p style="font-size:14px;color:var(--muted)">Built by Max Youell · Comms · Kirklees Council. Questions: <strong style="color:var(--ink)">maxyouell.work@gmail.com</strong></p>
+    </div>
+    <div class="slide-num">09 / 09</div>
+    </div>
+  </section>
+
+  <div class="nav-hint" id="navHint">
+    Use <kbd>↓</kbd><kbd>↑</kbd> or scroll · <kbd>F</kbd> for fullscreen
+  </div>
+
+<script>
+  // Arrow-key slide nav
+  const slides = [...document.querySelectorAll('.slide')];
+  let current = 0;
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting && e.intersectionRatio > 0.5){
+        current = slides.indexOf(e.target);
+      }
+    });
+  }, { threshold: [0.5] });
+  slides.forEach(s => observer.observe(s));
+
+  function goTo(i){
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    slides[i].scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' '){
+      e.preventDefault();
+      goTo(current + 1);
+    } else if(e.key === 'ArrowUp' || e.key === 'PageUp'){
+      e.preventDefault();
+      goTo(current - 1);
+    } else if(e.key === 'Home'){
+      e.preventDefault();
+      goTo(0);
+    } else if(e.key === 'End'){
+      e.preventDefault();
+      goTo(slides.length - 1);
+    } else if(e.key === 'f' || e.key === 'F'){
+      if(!document.fullscreenElement){ document.documentElement.requestFullscreen(); }
+      else { document.exitFullscreen(); }
+    }
+  });
+
+  // Hide nav hint after 6s
+  setTimeout(()=>document.getElementById('navHint').classList.add('hide'), 6000);
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @font-face{font-family:"VAG";src:url("../fonts/vag-bold.ttf");font-weight:700}
+  @font-face{font-family:"VAG";src:url("../fonts/vag-light.ttf");font-weight:300}
+  @font-face{font-family:"DIN";src:url("../fonts/din-regular.otf");font-weight:400}
+  @font-face{font-family:"DIN";src:url("../fonts/din-bold.otf");font-weight:700}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{font-family:"DIN",system-ui,sans-serif;background:#e5e0d8;width:100%;min-height:100vh}
+  body{padding:48px;display:flex;gap:48px;justify-content:center;align-items:flex-start}
+
+  .card{
+    width:70mm;
+    height:100mm;
+    border-radius:5mm;
+    overflow:hidden;
+    position:relative;
+    box-shadow:
+      0 4px 8px rgba(0,0,0,.08),
+      0 30px 60px rgba(0,0,0,.18),
+      0 1px 2px rgba(0,0,0,.04);
+    background:#1a2234;
+    color:#f5f0eb;
+  }
+
+  /* ===== FRONT — identity (worn-side) ===== */
+  .front{
+    background:linear-gradient(165deg,#1a2234 0%,#243044 100%);
+    padding:7mm 6mm 6mm;
+    display:flex;
+    flex-direction:column;
+  }
+  .front-glow{
+    position:absolute;
+    top:-15mm;right:-15mm;
+    width:50mm;height:50mm;
+    background:radial-gradient(circle,rgba(212,104,26,.45) 0%,rgba(212,104,26,0) 65%);
+    pointer-events:none;
+  }
+  .front-glow-2{
+    position:absolute;
+    bottom:-25mm;left:-15mm;
+    width:60mm;height:60mm;
+    background:radial-gradient(circle,rgba(0,201,219,.18) 0%,rgba(0,201,219,0) 65%);
+    pointer-events:none;
+  }
+  .front-top{
+    position:relative;z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:auto;
+  }
+  .front-bk{
+    width:11mm;height:11mm;
+    display:block;
+  }
+  .front-eyebrow-pill{
+    font-family:"VAG",sans-serif;
+    font-weight:700;
+    font-size:2.6mm;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:rgba(245,240,235,.55);
+  }
+  .front-name-block{
+    margin-top:auto;
+    margin-bottom:7mm;
+    position:relative;
+    z-index:2;
+  }
+  .front-eyebrow{
+    font-size:2.2mm;
+    font-weight:700;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:#e8842f;
+    margin-bottom:2mm;
+  }
+  .front-name{
+    font-family:"VAG",sans-serif;
+    font-weight:700;
+    font-size:9.5mm;
+    line-height:.95;
+    letter-spacing:-.02em;
+    color:#f5f0eb;
+    margin-bottom:2.5mm;
+  }
+  .front-role{
+    font-size:3mm;
+    line-height:1.35;
+    color:rgba(245,240,235,.78);
+    max-width:55mm;
+  }
+  .front-foot{
+    border-top:.3mm solid rgba(255,255,255,.13);
+    padding-top:3.5mm;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:relative;
+    z-index:2;
+  }
+  .front-kc{
+    height:6.5mm;
+    width:auto;
+    filter:brightness(0) invert(1);
+    opacity:.9;
+  }
+  .front-foot-sub{
+    font-size:2.2mm;
+    color:rgba(245,240,235,.5);
+    letter-spacing:.04em;
+    text-align:right;
+  }
+
+  /* ===== BACK — QR / scan-me ===== */
+  .back{
+    background:#f5f0eb;
+    color:#1a2234;
+    padding:9mm 6mm 5mm;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .back::before{
+    content:"";
+    position:absolute;
+    top:0;left:0;right:0;height:1.8mm;
+    background:#d4681a;
+  }
+  .back-bk{
+    width:7mm;height:7mm;
+    display:block;
+    margin-bottom:2mm;
+  }
+  .back-cta{
+    font-family:"VAG",sans-serif;
+    font-weight:700;
+    font-size:9mm;
+    line-height:.95;
+    letter-spacing:-.025em;
+    color:#1a2234;
+    text-align:center;
+    margin-top:2mm;
+    margin-bottom:2mm;
+  }
+  .back-cta em{
+    font-style:normal;
+    color:#d4681a;
+  }
+  .back-sub{
+    font-size:2.4mm;
+    line-height:1.3;
+    color:rgba(26,34,52,.6);
+    text-align:center;
+    margin-bottom:3mm;
+    max-width:55mm;
+  }
+  .back-qr-frame{
+    margin-bottom:auto;
+  }
+  .back-qr{
+    width:50mm;height:50mm;
+    display:block;
+  }
+  .back-foot{
+    width:100%;
+    text-align:center;
+    padding-top:2mm;
+  }
+  .back-foot-line{
+    font-size:2.3mm;
+    font-weight:700;
+    color:#1a2234;
+    letter-spacing:.01em;
+    opacity:.7;
+  }
+  .back-foot-kc{
+    height:5mm;
+    width:auto;
+    opacity:.65;
+  }
+</style>
+</head>
+<body>
+
+  <!-- FRONT (identity, visible while worn) -->
+  <div class="card front">
+    <div class="front-glow"></div>
+    <div class="front-glow-2"></div>
+    <div class="front-top">
+      <img class="front-bk" src="bk-mark.png" alt="Business Kirklees">
+    </div>
+    <div class="front-name-block">
+      <div class="front-eyebrow">Invest in Kirklees</div>
+      <div class="front-name">Jess<br>Newbould</div>
+      <div class="front-role">Inward Investment Project Officer · Business Kirklees</div>
+    </div>
+    <div class="front-foot">
+      <img class="front-kc" src="kc-logo.png" alt="Kirklees Council">
+      <div class="front-foot-sub">businesskirklees.com</div>
+    </div>
+  </div>
+
+  <!-- BACK (QR + scan prompt) -->
+  <div class="card back">
+    <div class="back-cta">Let's<br><em>connect.</em></div>
+    <div class="back-sub">£3.5bn of regeneration.<br>Sites, schemes, and the team to talk to.</div>
+    <div class="back-qr-frame">
+      <img class="back-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=0&qzone=1&bgcolor=245-240-235&data=https%3A%2F%2Fmaxyouellwork.github.io%2Fbusiness-kirklees-ukreiif%2F%3Fd%3Djs" alt="QR">
+    </div>
+    <div class="back-foot">
+      <div class="back-foot-line">businesskirklees.com</div>
+    </div>
+  </div>
+
+</body>
+</html>

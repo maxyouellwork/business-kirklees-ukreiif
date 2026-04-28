@@ -3,3 +3,9 @@ node_modules
 .wrangler
 brochure.pdf
 brochure-cover.png
+# Internal dev/team artifacts — not for the live deployed site
+capture-lighthouse.mjs
+presentation/render.mjs
+presentation/slide-*.png
+presentation/lander-mockup.png
+presentation/lanyard-mockup.png
