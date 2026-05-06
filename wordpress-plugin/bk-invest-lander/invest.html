@@ -9,10 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    @font-face{font-family:"VAG Rounded";src:url("fonts/vag-bold.ttf") format("truetype");font-weight:700;font-display:swap}
-    @font-face{font-family:"VAG Rounded";src:url("fonts/vag-light.ttf") format("truetype");font-weight:300;font-display:swap}
-    @font-face{font-family:"D-DIN";src:url("fonts/din-regular.otf") format("opentype");font-weight:400;font-display:swap}
-    @font-face{font-family:"D-DIN";src:url("fonts/din-bold.otf") format("opentype");font-weight:700;font-display:swap}
+    @font-face{font-family:"VAG Rounded";src:url("{{PLUGIN_URL}}/fonts/vag-bold.ttf") format("truetype");font-weight:700;font-display:swap}
+    @font-face{font-family:"VAG Rounded";src:url("{{PLUGIN_URL}}/fonts/vag-light.ttf") format("truetype");font-weight:300;font-display:swap}
+    @font-face{font-family:"D-DIN";src:url("{{PLUGIN_URL}}/fonts/din-regular.otf") format("opentype");font-weight:400;font-display:swap}
+    @font-face{font-family:"D-DIN";src:url("{{PLUGIN_URL}}/fonts/din-bold.otf") format("opentype");font-weight:700;font-display:swap}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
@@ -285,7 +285,7 @@
       display:flex;flex-direction:column;
     }
     .biz-inner::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--navy) 0%,var(--navy) 60%,var(--orange) 60%,var(--orange) 100%);z-index:4}
-    .biz-inner::after{content:"";position:absolute;right:-54%;bottom:-36%;width:110%;height:160%;pointer-events:none;z-index:1;background:url('turbine-graphic.png?v=2') no-repeat center/contain;opacity:.10}
+    .biz-inner::after{content:"";position:absolute;right:-54%;bottom:-36%;width:110%;height:160%;pointer-events:none;z-index:1;background:url('{{PLUGIN_URL}}/turbine-graphic.png?v=2') no-repeat center/contain;opacity:.10}
     .biz-card:hover .biz-inner{transform:rotateY(0deg) rotateX(0deg) scale(1.02);box-shadow:0 2px 4px rgba(0,0,0,.06),0 8px 16px rgba(0,0,0,.08),0 24px 48px rgba(0,0,0,.12),0 48px 96px rgba(0,0,0,.1)}
     .biz-body{padding:20px 24px 18px;text-align:left;flex:1;display:flex;flex-direction:column;position:relative;z-index:3}
     .biz-logo{width:100px;height:auto;display:block}
@@ -393,7 +393,7 @@
       <span class="hero-video-toggle-label">Pause video</span>
     </button>
     <div class="hero-c">
-      <div class="hero-badge"><img src="ukreiif-white.png" alt="UKREiiF" style="height:28px;width:auto"> 2026</div>
+      <div class="hero-badge"><img src="{{PLUGIN_URL}}/ukreiif-white.png" alt="UKREiiF" style="height:28px;width:auto"> 2026</div>
       <img class="hero-logo" src="https://businesskirklees.com/wp-content/uploads/2022/07/Business-Kirklees-icon-white.png" alt="Business Kirklees">
       <h1><span class="ln"><span class="ln-i">Invest in</span></span><span class="ln"><span class="ln-i"><em>Kirklees.</em></span></span></h1>
       <p class="hero-sub">At the heart of the Northern Powerhouse. &pound;3.5bn of ongoing investment reshaping our district.</p>
@@ -473,7 +473,7 @@
   <!-- CONNECTIVITY -->
   <section class="connectivity">
     <div class="dep-bg">
-      <img class="dep-bg-img" src="departure-board.jpg" alt="" loading="lazy">
+      <img class="dep-bg-img" src="{{PLUGIN_URL}}/departure-board.jpg" alt="" loading="lazy">
       <div class="dep-bg-ov"></div>
       <div class="dep-content">
         <div class="tag rv-up"><span class="tag-dot"></span>Connectivity</div>
@@ -481,7 +481,7 @@
         <p class="s-desc rv-up">At the centre of the Leeds, Manchester &amp; Sheffield triangle.</p>
         <div class="dep-board rv-scale">
           <div class="dep-board-glow"></div>
-          <img src="departure-board.jpg" alt="Departures from Kirklees — Leeds 25min, Manchester 35min, Sheffield 40min, London 2:30hrs" loading="lazy">
+          <img src="{{PLUGIN_URL}}/departure-board.jpg" alt="Departures from Kirklees — Leeds 25min, Manchester 35min, Sheffield 40min, London 2:30hrs" loading="lazy">
         </div>
       </div>
     </div>
