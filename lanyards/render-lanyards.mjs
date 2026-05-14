@@ -10,6 +10,17 @@ const PROJECT_ROOT = resolve(import.meta.dirname, '..');
 const OUTPUT_DIR = resolve(import.meta.dirname, 'output');
 const LANDING_URL = 'https://businesskirklees.com/ukreiif/';
 
+// Embed fonts as base64 data URIs so Chrome guarantees them and the PDF embeds
+// TrueType/OpenType (not Type 3 bitmap fonts, which print blurry).
+function fontDataUri(filename, mime) {
+  const b64 = readFileSync(resolve(PROJECT_ROOT, 'fonts', filename)).toString('base64');
+  return `data:${mime};base64,${b64}`;
+}
+const FONT_VAG_BOLD    = fontDataUri('vag-bold.ttf',    'font/ttf');
+const FONT_VAG_LIGHT   = fontDataUri('vag-light.ttf',   'font/ttf');
+const FONT_DIN_REG     = fontDataUri('din-regular.ttf', 'font/ttf');
+const FONT_DIN_BOLD    = fontDataUri('din-bold.ttf',    'font/ttf');
+
 const DELEGATES = [
   { code: 'js', firstName: 'Jess',     lastName: 'Newbould',    role: 'Inward Investment Project Officer' },
   { code: 'cw', firstName: 'Chelsey',  lastName: 'Warvill',     role: 'Communications Business Partner' },
@@ -46,17 +57,18 @@ function startServer(port){
 // Returns a single-file HTML page with both sides as two print pages (70x100mm each).
 function buildHtml({ firstName, lastName, role, code }, serverBase) {
   const qrUrl = `${LANDING_URL}?d=${code}`;
-  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=0&qzone=1&bgcolor=245-240-235&data=${encodeURIComponent(qrUrl)}`;
+  // SVG QR = vector, sharp at any print resolution.
+  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?format=svg&size=600x600&margin=0&qzone=1&bgcolor=245-240-235&data=${encodeURIComponent(qrUrl)}`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <style>
   @page { size: 70mm 100mm; margin: 0; }
-  @font-face{font-family:"VAG";src:url("${serverBase}/fonts/vag-bold.ttf");font-weight:700}
-  @font-face{font-family:"VAG";src:url("${serverBase}/fonts/vag-light.ttf");font-weight:300}
-  @font-face{font-family:"DIN";src:url("${serverBase}/fonts/din-regular.otf");font-weight:400}
-  @font-face{font-family:"DIN";src:url("${serverBase}/fonts/din-bold.otf");font-weight:700}
+  @font-face{font-family:"VAG";src:url("${FONT_VAG_BOLD}") format("truetype");font-weight:700;font-display:block}
+  @font-face{font-family:"VAG";src:url("${FONT_VAG_LIGHT}") format("truetype");font-weight:300;font-display:block}
+  @font-face{font-family:"DIN";src:url("${FONT_DIN_REG}") format("truetype");font-weight:400;font-display:block}
+  @font-face{font-family:"DIN";src:url("${FONT_DIN_BOLD}") format("truetype");font-weight:700;font-display:block}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{font-family:"DIN",system-ui,sans-serif;background:transparent}
 
