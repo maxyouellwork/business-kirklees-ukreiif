@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Business Kirklees — UKREiiF Lander
  * Description: Serves the "Invest in Kirklees" landing page at /ukreiif using a self-contained static HTML file. Used by Kirklees Council delegates at UKREiiF 2026 (19–21 May).
- * Version: 1.0.1
+ * Version: 1.0.3
  * Author: Kirklees Council Comms — Max Youell
  */
 

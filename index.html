@@ -143,7 +143,7 @@
     .delegate-splash[hidden]{display:none}
     .delegate-splash-glow{position:absolute;top:-120px;right:-100px;width:420px;height:420px;background:radial-gradient(circle,rgba(212,104,26,.4) 0%,rgba(212,104,26,0) 65%);pointer-events:none}
     .delegate-splash-glow-2{position:absolute;bottom:30%;left:-150px;width:380px;height:380px;background:radial-gradient(circle,rgba(0,201,219,.18) 0%,rgba(0,201,219,0) 65%);pointer-events:none}
-    .delegate-splash-content{padding:9vh 24px 0;position:relative;z-index:2;width:100%;max-width:560px}
+    .delegate-splash-content{padding:clamp(20px,3vh,40px) 24px 0;position:relative;z-index:2;width:100%;max-width:560px}
     .delegate-splash-h{font-family:var(--heading);font-weight:700;font-size:clamp(54px,14vw,84px);line-height:.92;letter-spacing:-.025em;margin-bottom:18px}
     .delegate-splash-h em{font-style:normal;color:#e8842f}
     .delegate-splash-sub{font-size:clamp(15px,4vw,18px);line-height:1.45;color:rgba(245,240,235,.7);max-width:480px;margin:0 auto}
@@ -152,7 +152,8 @@
     .dlg-modal{position:fixed;inset:auto 0 0 0;z-index:160;display:flex;align-items:flex-end;justify-content:center;padding:0;animation:dlgSlideUp .45s cubic-bezier(.16,1,.3,1)}
     .dlg-modal[hidden]{display:none}
     .dlg-backdrop{display:none}
-    .dlg-card{position:relative;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -16px 60px rgba(0,0,0,.3),0 -4px 16px rgba(0,0,0,.12);width:100%;max-width:520px;max-height:85vh;overflow-y:auto;animation:dlgUp .45s cubic-bezier(.16,1,.3,1)}
+    .dlg-card{position:relative;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -16px 60px rgba(0,0,0,.3),0 -4px 16px rgba(0,0,0,.12);width:100%;max-width:520px;max-height:calc(100dvh - 220px);overflow-y:auto;animation:dlgUp .45s cubic-bezier(.16,1,.3,1)}
+    @media (max-width:480px){.dlg-card{max-height:calc(100dvh - 160px)}}
     .dlg-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:50%;border:none;background:rgba(0,0,0,.05);color:var(--text-mid);font-size:20px;line-height:1;cursor:pointer;display:grid;place-items:center;z-index:2;padding:0}
     .dlg-close:hover{background:rgba(0,0,0,.1);color:var(--text-dark)}
     .dlg-header{padding:22px 24px 18px;border-bottom:1px solid rgba(0,0,0,.06);display:flex;gap:14px;align-items:center}
@@ -336,7 +337,6 @@
     <div class="delegate-splash-glow-2" aria-hidden="true"></div>
     <div class="delegate-splash-content">
       <h1 class="delegate-splash-h" id="delegateSplashHeading">Let's<br><em>connect.</em></h1>
-      <p class="delegate-splash-sub">£3.5bn of regeneration.<br>Sites, schemes, and the team to talk to.</p>
     </div>
   </section>
 
@@ -557,13 +557,14 @@
     // Per-delegate QR — short codes on lanyards, e.g. ?d=js for Jess.
     const DELEGATES={
       js:{name:"Jess Newbould",role:"Inward Investment Project Officer",email:"jess.newbould@kirklees.gov.uk"},
+      cw:{name:"Chelsey Warvill",role:"Communications Business Partner",email:"chelsey.warvill@kirklees.gov.uk"},
       jb:{name:"James Barker",role:"Inward Investment Project Officer",email:"james.barker@kirklees.gov.uk"},
       cd:{name:"Chris Duffill",role:"Head of Business, Economy & Growth",email:"chris.duffill@kirklees.gov.uk"},
       tf:{name:"Thomas Fish",role:"Head of Town Centre Programmes",email:"thomas.fish@kirklees.gov.uk"},
-      jo:{name:"Joanne Bartholomew",role:"Director of Development",email:"joanne.bartholomew@kirklees.gov.uk"},
+      jo:{name:"Joanne Bartholomew",role:"Service Director — Development",email:"joanne.bartholomew@kirklees.gov.uk"},
+      dw:{name:"David Wildman",role:"Service Director for Skills & Regeneration",email:"david.wildman@kirklees.gov.uk"},
       ds:{name:"David Shepherd",role:"Executive Director for Place",email:"david.shepherd@kirklees.gov.uk"},
-      dw:{name:"David Wildman",role:"Service Director for Regeneration & Skills",email:"david.wildman@kirklees.gov.uk"},
-      pj:{name:"Phil Jones",role:"Service Director for Homes & Neighbourhoods",email:"phil.jones@kirklees.gov.uk"},
+      dg:{name:"David Glover",role:"Senior Responsible Officer, Our Cultural Heart",email:"david.glover@kirklees.gov.uk"},
     };
     const DELEGATE_CODE=(new URLSearchParams(location.search).get("d")||"").toLowerCase().slice(0,8);
     const DELEGATE=DELEGATES[DELEGATE_CODE];
