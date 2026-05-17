@@ -260,7 +260,8 @@ The Worker forwards each capture into a Microsoft Power Automate flow on the **f
 
 ### 7.3 Action 2 — Send email (V2)
 - **Connector:** Office 365 Outlook
-- **From:** Currently sent from Max's mailbox during testing — needs swapping to `invest@kirklees.gov.uk` once the Investment team grants send-as access (pending action)
+- **From (Send As):** `communication@kirklees.gov.uk` (the Comms shared mailbox; requires Send As permission on the Outlook connection account)
+- **Reply To:** `invest@kirklees.gov.uk` — replies route to the Investment team even though the message is sent from the Comms mailbox
 - **To:** the email address submitted by the lead
 - **Subject:** "Your Kirklees investment pack"
 - **Body:** Personalised greeting, link to the brochure PDF, contact info. Uses an inline expression so the closing line is date-aware:
@@ -270,6 +271,12 @@ The Worker forwards each capture into a Microsoft Power Automate flow on the **f
 
 ### 7.4 Action 3 — Post a card in Teams
 The flow optionally posts a card into the Investment team's Teams chat each time a lead lands, so the team gets a real-time notification. (This was originally an adaptive-card action that we deleted because it required a Premium licence; current setup is the simpler "post message" action that works on the free tier.)
+
+### 7.5 Second flow — Scan & Save
+
+There is a **second, independent flow**: **"Scan & Save — UKREiiF"** (flow id `9f656a0a-63b4-4298-a89f-3523da1d7b9b`). Its source is a separate Cloudflare Pages app, `scan-and-save.pages.dev` (**not in this repo**), used at the event to scan contacts. It POSTs `contactName / contactCompany / contactEmail / delegate / event / emailSubject / emailBody` to its own Teams webhook.
+
+That flow logs each scan to a **separate `Scans` table** in the same `UKREiiF 2026 — Email Captures.xlsx` workbook (the lander flow uses the `Captures` table), then emails the brochure to the scanned contact using the same `communication@` / `invest@` From / Reply-To convention. The Excel "Add a row" step runs **before** the email, so a scanned card with no email is still logged (only that run's email step shows as failed — no wrong email is ever sent).
 
 ---
 
